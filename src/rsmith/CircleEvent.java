@@ -14,12 +14,12 @@ public class CircleEvent implements SweepEvent {
 	private Site pj;
 	private Site pk;
 	
-	public CircleEvent(Point2D center, Site pi, Site pj, Site pk) {
+	public CircleEvent(Point2D center, double radius, Site pi, Site pj, Site pk) {
 		this.center = center;
 		this.pi = pi;
 		this.pj = pj;
 		this.pk = pk;
-		this.radius = this.center.distance(pi.getPosition());
+		this.radius = radius;
 		this.eventY = center.getY() - radius;
 		this.eventPoint = new Point2D.Double(center.getX(), eventY);
 	}
@@ -43,8 +43,9 @@ public class CircleEvent implements SweepEvent {
 		CircleEvent result = null;
 		Point2D center = computeCircle(pi.getPosition(),pj.getPosition(),pk.getPosition());
 		if(center != null) {
-			if(center.getY() <= sweep) {
-				result = new CircleEvent(center, pi,pj,pk);
+			double radius = center.distance(pi.getPosition());
+			if(center.getY()-radius <= sweep) {
+				result = new CircleEvent(center, radius, pi,pj,pk);
 			}
 		}
 		return result;		
@@ -146,6 +147,20 @@ public class CircleEvent implements SweepEvent {
 	 */
 	public void setCenter(Point2D center) {
 		this.center = center;
+	}
+
+	/**
+	 * @return the radius
+	 */
+	public double getRadius() {
+		return radius;
+	}
+
+	/**
+	 * @param radius the radius to set
+	 */
+	public void setRadius(double radius) {
+		this.radius = radius;
 	}
 
 }
