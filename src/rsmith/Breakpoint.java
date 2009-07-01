@@ -13,6 +13,7 @@ public class Breakpoint implements Comparable<Breakpoint> {
 	private Site left;
 	private Site right;
 	private Point2D position;
+	private double sweepY;
 
 	/**
 	 * @param previous
@@ -26,23 +27,6 @@ public class Breakpoint implements Comparable<Breakpoint> {
 		this.setNext(next);
 		this.left = left;
 		this.right = right;
-	}
-
-	/**
-	 * @param sweep
-	 * @return
-	 */
-	public Point2D getPosition(double sweep) {
-		Quadratic qLeft = left.getQuadratic(sweep);
-		Quadratic qRight = right.getQuadratic(sweep);
-		double[] roots = qLeft.intersect(qRight);
-		if (roots != null) {
-			double x1 = roots[0];
-			double x2 = roots[1];
-			if (x1 != x2) {
-			}
-		}
-		return null;
 	}
 
 	/**
@@ -190,6 +174,36 @@ public class Breakpoint implements Comparable<Breakpoint> {
 	public int compareTo(Breakpoint arg0) {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	/**
+	 * @param sweep
+	 */
+	private void updatePosition(double sweep) {
+		Quadratic qLeft = left.getQuadratic(sweep);
+		Quadratic qRight = right.getQuadratic(sweep);
+		double[] roots = qLeft.intersect(qRight);
+		if (roots != null) {
+			double x1 = roots[0];
+			double x2 = roots[1];
+			if (x1 != x2) {
+			}
+		}	
+	}
+	
+	/**
+	 * @param sweepY
+	 */
+	public void setSweepY(double sweepY) {
+		this.sweepY = sweepY;
+		updatePosition(this.sweepY);
+	}
+
+	/**
+	 * @return
+	 */
+	public double getSweepY() {
+		return sweepY;
 	}
 
 }

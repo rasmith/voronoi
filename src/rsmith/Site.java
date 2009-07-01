@@ -8,7 +8,7 @@ import java.awt.geom.Point2D;
  */
 public class Site implements Comparable<Site> {
 
-	private Point2D p;
+	private Point2D position;
 
 	/**
 	 * @param p
@@ -21,8 +21,8 @@ public class Site implements Comparable<Site> {
 	 * @return
 	 */
 	public Quadratic getQuadratic(double sweep) {
-		double x = p.getX();
-		double y = p.getY();
+		double x = position.getX();
+		double y = position.getY();
 		double d = 2 * (y - sweep);
 		double A = (1 / d);
 		double B = -(2 * x) / d;
@@ -34,15 +34,15 @@ public class Site implements Comparable<Site> {
 	/**
 	 * @return
 	 */
-	public Point2D getP() {
-		return p;
+	public Point2D getPosition() {
+		return position;
 	}
 
 	/**
 	 * @param p
 	 */
-	public void setP(Point2D p) {
-		this.p = p;
+	public void setPosition(Point2D p) {
+		this.position = p;
 	}
 
 	/*
@@ -54,7 +54,7 @@ public class Site implements Comparable<Site> {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((p == null) ? 0 : p.hashCode());
+		result = prime * result + ((position == null) ? 0 : position.hashCode());
 		return result;
 	}
 
@@ -72,10 +72,10 @@ public class Site implements Comparable<Site> {
 		if (getClass() != obj.getClass())
 			return false;
 		Site other = (Site) obj;
-		if (p == null) {
-			if (other.p != null)
+		if (position == null) {
+			if (other.position != null)
 				return false;
-		} else if (!p.equals(other.p))
+		} else if (!position.equals(other.position))
 			return false;
 		return true;
 	}
