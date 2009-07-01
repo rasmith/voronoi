@@ -5,18 +5,51 @@ import java.awt.geom.Point2D;
 public class CircleEvent implements SweepEvent {
 
 	private Point2D eventPoint;
+	private double eventY;
 	private Point2D center;
+	private double radius;
 	private Breakpoint leftBP;
 	private Breakpoint rightBP;
 	private Site pi;
 	private Site pj;
 	private Site pk;
 	
+	public CircleEvent(Point2D center, Site pi, Site pj, Site pk) {
+		this.center = center;
+		this.pi = pi;
+		this.pj = pj;
+		this.pk = pk;
+		this.radius = this.center.distance(pi.getPosition());
+		this.eventY = center.getY() - radius;
+		this.eventPoint = new Point2D.Double(center.getX(), eventY);
+	}
+	
 	@Override
 	public double getY() {
-		return eventPoint.getY();
+		return eventY;
 	}
 
+	public static Point2D computeCircle(Point2D pi, Point2D pj, Point2D pk) {
+		Point2D result = null;
+		if(pi.getX() <= pj.getX() && pj.getX() <= pk.getX()) {
+			Line l1 = Line.bisector(pi, pj);
+			Line l2 = Line.bisector(pj, pk);
+			result = l1.intersect(l2);
+		}
+		return result;
+	}
+	
+	public static CircleEvent getCircleEvent(double sweep, Site pi, Site pj, Site pk) {
+		CircleEvent result = null;
+		Point2D center = computeCircle(pi.getPosition(),pj.getPosition(),pk.getPosition());
+		if(center != null) {
+			if(center.getY() <= sweep) {
+				result = new CircleEvent(center, pi,pj,pk);
+			}
+		}
+		return result;		
+	}
+	
 	/**
 	 * @return the pi
 	 */
