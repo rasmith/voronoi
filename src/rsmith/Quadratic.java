@@ -59,8 +59,10 @@ public class Quadratic implements Comparable<Quadratic> {
 		if (d > 0) {
 			double s = Math.sqrt(d);
 			result = new double[2];
-			result[0] = (b + s) / (2 * a);
-			result[1] = (b - s) / (2 * a);
+			double x1=(b + s) / (2 * a);
+			double x2=(b - s) / (2 * a);
+			result[0] = Math.min(x1, x2);
+			result[1] = Math.max(x1, x2);
 		}
 		return result;
 	}

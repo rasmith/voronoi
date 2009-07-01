@@ -14,6 +14,7 @@ public class Site implements Comparable<Site> {
 	 * @param p
 	 */
 	public Site(Point2D p) {
+		position=p;
 	}
 
 	/**

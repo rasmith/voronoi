@@ -99,81 +99,18 @@ public class Breakpoint implements Comparable<Breakpoint> {
 		this.position = position;
 	}
 
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#hashCode()
-	 */
 	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((left == null) ? 0 : left.hashCode());
-		result = prime * result + ((next == null) ? 0 : next.hashCode());
-		result = prime * result
-				+ ((position == null) ? 0 : position.hashCode());
-		result = prime * result
-				+ ((previous == null) ? 0 : previous.hashCode());
-		result = prime * result + ((right == null) ? 0 : right.hashCode());
+	public int compareTo(Breakpoint bp) {
+		Point2D p = getPosition();
+		Point2D q = bp.getPosition();
+		double diffx = p.getX() - q.getX();
+		double diffy = p.getY() - q.getY();
+		int result=	(diffx < 0 ? -1 : 
+						(diffx > 0 ? 1 : 
+							(diffy < 0 ? -1 :
+								(diffy > 0 ? 1 : 0))));
+		
 		return result;
-	}
-
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see java.lang.Object#equals(java.lang.Object)
-	 */
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (!(obj instanceof Breakpoint))
-			return false;
-		Breakpoint other = (Breakpoint) obj;
-		if (left == null) {
-			if (other.left != null)
-				return false;
-		} else if (!left.equals(other.left))
-			return false;
-		if (next == null) {
-			if (other.next != null)
-				return false;
-		} else if (!next.equals(other.next))
-			return false;
-		if (position == null) {
-			if (other.position != null)
-				return false;
-		} else if (!position.equals(other.position))
-			return false;
-		if (previous == null) {
-			if (other.previous != null)
-				return false;
-		} else if (!previous.equals(other.previous))
-			return false;
-		if (right == null) {
-			if (other.right != null)
-				return false;
-		} else if (!right.equals(other.right))
-			return false;
-		return true;
-	}
-
-	@Override
-	public int compareTo(Breakpoint arg0) {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 	/**
@@ -186,7 +123,19 @@ public class Breakpoint implements Comparable<Breakpoint> {
 		if (roots != null) {
 			double x1 = roots[0];
 			double x2 = roots[1];
-			if (x1 != x2) {
+			if (x1 != x2) {	
+				// (x1,y1) and (x2,y2) are the intersection points
+				// intersect should return x1 and x2 such that x1 < x2
+				// need to determine which parabola is lowest when x < x1
+				double half=x1/2;
+				double mid=(x1+x2)/2;
+				if(qLeft.eval(half) < qRight.eval(half) && qRight.eval(mid) < qLeft.eval(mid) ) {
+					double y1=qLeft.eval(x1);
+					setPosition(new Point2D.Double(x1,y1));
+				} else {
+					double y2=qLeft.eval(x2);
+					setPosition(new Point2D.Double(x2,y2));
+				}
 			}
 		}	
 	}
@@ -204,6 +153,32 @@ public class Breakpoint implements Comparable<Breakpoint> {
 	 */
 	public double getSweepY() {
 		return sweepY;
+	}
+
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result
+				+ ((position == null) ? 0 : position.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (!(obj instanceof Breakpoint))
+			return false;
+		Breakpoint other = (Breakpoint) obj;
+		if (position == null) {
+			if (other.position != null)
+				return false;
+		} else if (!position.equals(other.position))
+			return false;
+		return true;
 	}
 
 }
