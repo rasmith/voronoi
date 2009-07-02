@@ -3,6 +3,7 @@ package rsmith;
 public class SiteEvent implements SweepEvent {
 
 	private Site site;
+	private Voronoi voronoi;
 	
 	@Override
 	public double getY() {
@@ -16,5 +17,14 @@ public class SiteEvent implements SweepEvent {
 	public void setSite(Site site) {
 		this.site = site;
 	}
+
+	public Voronoi getVoronoi() {
+		return voronoi;
+	}
+
+	public void setVoronoi(Voronoi voronoi) {
+		this.voronoi = voronoi;
+	}
+
 	
 }

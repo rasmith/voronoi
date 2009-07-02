@@ -13,7 +13,7 @@ public class Breakpoint implements Comparable<Breakpoint> {
 	private Site left;
 	private Site right;
 	private Point2D position;
-	private double sweepY;
+	private Voronoi voronoi;
 
 	/**
 	 * @param previous
@@ -95,7 +95,7 @@ public class Breakpoint implements Comparable<Breakpoint> {
 	/**
 	 * @param position
 	 */
-	public void setPosition(Point2D position) {
+	private void setPosition(Point2D position) {
 		this.position = position;
 	}
 
@@ -116,7 +116,8 @@ public class Breakpoint implements Comparable<Breakpoint> {
 	/**
 	 * @param sweep
 	 */
-	private void updatePosition(double sweep) {
+	private void updatePosition() {
+		double sweep = voronoi.getSweepY();
 		Quadratic qLeft = left.getQuadratic(sweep);
 		Quadratic qRight = right.getQuadratic(sweep);
 		double[] roots = qLeft.intersect(qRight);
@@ -138,21 +139,6 @@ public class Breakpoint implements Comparable<Breakpoint> {
 				}
 			}
 		}	
-	}
-	
-	/**
-	 * @param sweepY
-	 */
-	public void setSweepY(double sweepY) {
-		this.sweepY = sweepY;
-		updatePosition(this.sweepY);
-	}
-
-	/**
-	 * @return
-	 */
-	public double getSweepY() {
-		return sweepY;
 	}
 
 	@Override
@@ -179,6 +165,14 @@ public class Breakpoint implements Comparable<Breakpoint> {
 		} else if (!position.equals(other.position))
 			return false;
 		return true;
+	}
+
+	public void setVoronoi(Voronoi voronoi) {
+		this.voronoi = voronoi;
+	}
+
+	public Voronoi getVoronoi() {
+		return voronoi;
 	}
 
 }

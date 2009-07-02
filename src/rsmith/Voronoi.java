@@ -10,7 +10,8 @@ public class Voronoi {
 	private TreeSet<Breakpoint> breakpoints;
 	private TreeSet<Site> sites;
 	private TreeSet<Point2D> points;
-
+	private double sweepY;
+	
 	/**
 	 * @param p
 	 */
@@ -18,11 +19,18 @@ public class Voronoi {
 		points = p;
 	}
 
-	/**
-	 * 
-	 */
-	public void runVoronoi() {
+	public void init() {
+		
 	}
+	
+	public void step() {
+		
+	}
+	
+	public boolean isFinished() {
+		return false;
+	}
+	
 
 	/**
 	 * @return the q
@@ -106,5 +114,13 @@ public class Voronoi {
 	 */
 	public void setPoints(TreeSet<Point2D> points) {
 		this.points = points;
+	}
+
+	public double getSweepY() {
+		return sweepY;
+	}
+
+	public void setSweepY(double sweepY) {
+		this.sweepY = sweepY;
 	}
 }

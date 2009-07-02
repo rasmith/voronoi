@@ -13,6 +13,7 @@ public class CircleEvent implements SweepEvent {
 	private Site pi;
 	private Site pj;
 	private Site pk;
+	private Voronoi voronoi;
 	
 	public CircleEvent(Point2D center, double radius, Site pi, Site pj, Site pk) {
 		this.center = center;
@@ -161,6 +162,14 @@ public class CircleEvent implements SweepEvent {
 	 */
 	public void setRadius(double radius) {
 		this.radius = radius;
+	}
+
+	public Voronoi getVoronoi() {
+		return voronoi;
+	}
+
+	public void setVoronoi(Voronoi voronoi) {
+		this.voronoi = voronoi;
 	}
 
 }

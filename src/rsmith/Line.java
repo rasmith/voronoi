@@ -11,7 +11,7 @@ public class Line {
 		this.m = m;
 		this.b = b;
 	}
-
+	
 	public static Line bisector(Point2D p, Point2D q) {
 		Line result = null;
 		double	px = p.getX(), py = p.getY(), 
