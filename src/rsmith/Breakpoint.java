@@ -89,6 +89,7 @@ public class Breakpoint implements Comparable<Breakpoint> {
 	 * @return
 	 */
 	public Point2D getPosition() {
+		updatePosition();
 		return position;
 	}
 

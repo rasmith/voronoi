@@ -162,7 +162,6 @@ public class Quadratic implements Comparable<Quadratic> {
 		return true;
 	}
 
-	@Override
 	public int compareTo(Quadratic o) {
 		// TODO Auto-generated method stub
 		return 0;

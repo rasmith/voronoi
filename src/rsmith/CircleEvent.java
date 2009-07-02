@@ -40,7 +40,7 @@ public class CircleEvent implements SweepEvent {
 		return result;
 	}
 	
-	public static CircleEvent getCircleEvent(double sweep, Site pi, Site pj, Site pk) {
+	public static CircleEvent createCircleEvent(double sweep, Site pi, Site pj, Site pk) {
 		CircleEvent result = null;
 		Point2D center = computeCircle(pi.getPosition(),pj.getPosition(),pk.getPosition());
 		if(center != null) {
