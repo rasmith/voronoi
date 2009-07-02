@@ -83,7 +83,6 @@ public class Site implements Comparable<Site> {
 
 	@Override
 	public int compareTo(Site o) {
-		// TODO Auto-generated method stub
-		return 0;
+		return PointUtils.comparePoints(this.getPosition(), o.getPosition());
 	}
 }

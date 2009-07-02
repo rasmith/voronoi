@@ -1,13 +1,14 @@
 package rsmith;
 
 import java.awt.geom.Point2D;
+import java.util.Iterator;
 import java.util.PriorityQueue;
 import java.util.TreeSet;
 
 public class Voronoi {
 
-	private PriorityQueue<SweepEvent> Q;
-	private TreeSet<Breakpoint> breakpoints;
+	private PriorityQueue<SweepEvent> Q; // sort by y-value
+	private TreeSet<Breakpoint> breakpoints; // sort by x-value
 	private TreeSet<Site> sites;
 	private TreeSet<Point2D> points;
 	private double sweepY;
@@ -20,18 +21,43 @@ public class Voronoi {
 	}
 
 	public void init() {
-		
+		Iterator<Point2D> iter = points.iterator();
+		while(iter.hasNext()) {
+			Point2D p = (Point2D)iter.next();
+			Site s = new Site(p);
+			sites.add(s);
+			SiteEvent se = new SiteEvent(s);
+			se.setVoronoi(this);
+			Q.add(se);
+		}
 	}
-	
+
 	public void step() {
-		
+		if(!isFinished()) {
+			SweepEvent e = (SweepEvent)Q.remove();
+			if(e instanceof SiteEvent) {
+				handleSiteEvent((SiteEvent)e);
+			} else {
+				handleCircleEvent((CircleEvent)e);
+			}
+		}
 	}
 	
 	public boolean isFinished() {
-		return false;
+		return Q.isEmpty();
 	}
 	
-
+	public void handleSiteEvent(SiteEvent se) {
+		if(breakpoints.isEmpty()) {
+			
+		} else {
+		}
+	}
+	
+	public void handleCircleEvent(CircleEvent ce) {
+		
+	}
+	
 	/**
 	 * @return the q
 	 */

@@ -101,16 +101,7 @@ public class Breakpoint implements Comparable<Breakpoint> {
 
 	@Override
 	public int compareTo(Breakpoint bp) {
-		Point2D p = getPosition();
-		Point2D q = bp.getPosition();
-		double diffx = p.getX() - q.getX();
-		double diffy = p.getY() - q.getY();
-		int result=	(diffx < 0 ? -1 : 
-						(diffx > 0 ? 1 : 
-							(diffy < 0 ? -1 :
-								(diffy > 0 ? 1 : 0))));
-		
-		return result;
+		return PointUtils.comparePoints(this.getPosition(), bp.getPosition());
 	}
 
 	/**

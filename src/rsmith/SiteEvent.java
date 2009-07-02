@@ -5,6 +5,10 @@ public class SiteEvent implements SweepEvent {
 	private Site site;
 	private Voronoi voronoi;
 	
+	public SiteEvent(Site s) {
+		site = s;
+	}
+	
 	@Override
 	public double getY() {
 		return site.getPosition().getY();
