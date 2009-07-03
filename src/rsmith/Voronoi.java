@@ -49,15 +49,22 @@ public class Voronoi {
 
 	public void handleSiteEvent(SiteEvent se) {
 		if (beachline.isEmpty()) {
+		    beachline.add(new VoronoiNode(se.getSite(), se));
 		} else {
-			if (beachline.size() == 1) {
-
-			} else {
-
-			}
+		    if(beachline.size() == 1) {
+		        VoronoiNode vn = beachline.first();
+		        beachline.remove(vn);
+		        
+		    } else {
+		        VoronoiNode before = beachline.floor(new VoronoiNode(se.getSite(),null));
+		        VoronoiNode after  = beachline.ceiling(new VoronoiNode(se.getSite(),null));
+		        Breakpoint left = (Breakpoint) before.getPoint();
+		        Breakpoint right =(Breakpoint) after.getPoint();
+		        
+		    }
 		}
 	}
-
+	
 	public void handleCircleEvent(CircleEvent ce) {
 
 	}
