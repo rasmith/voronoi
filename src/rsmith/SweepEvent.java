@@ -1,7 +1,7 @@
 package rsmith;
 
 public interface SweepEvent extends Comparable<SweepEvent> {
-	public double getY();
+	public double getEventY();
 
-	public void setVoronoi(Voronoi v);
+	public void setFortuneData(FortuneData v);
 }

@@ -23,14 +23,14 @@ public class Quadratic implements Comparable<Quadratic> {
 
 	/**
 	 * @param x
-	 * @return
+	 * @return the y value of this quadratic at x
 	 */
 	public double eval(double x) {
 		return Quadratic.evalQuadratic(x, a, b, c);
 	}
 
 	/**
-	 * @return
+	 * @return solutions, if any, to this quadratic
 	 */
 	public double[] solve() {
 		return Quadratic.solveQuadratic(a, b, c);
@@ -38,7 +38,8 @@ public class Quadratic implements Comparable<Quadratic> {
 
 	/**
 	 * @param q
-	 * @return
+	 * @return the points, if any, where this quadratic interesects with q
+	 *         sorted by x-value
 	 */
 	public double[] intersect(Quadratic q) {
 		double A = q.a - this.a;
@@ -51,7 +52,7 @@ public class Quadratic implements Comparable<Quadratic> {
 	 * @param a
 	 * @param b
 	 * @param c
-	 * @return
+	 * @return solution to a*x^2+bx+c in sorted order
 	 */
 	public static double[] solveQuadratic(double a, double b, double c) {
 		double[] result = null;
@@ -72,14 +73,14 @@ public class Quadratic implements Comparable<Quadratic> {
 	 * @param a
 	 * @param b
 	 * @param c
-	 * @return
+	 * @return evaluate a*x^2+bx+c
 	 */
 	public static double evalQuadratic(double x, double a, double b, double c) {
 		return a * x * x + b * x + c;
 	}
 
 	/**
-	 * @return
+	 * @return get a
 	 */
 	public double getA() {
 		return a;
@@ -93,7 +94,7 @@ public class Quadratic implements Comparable<Quadratic> {
 	}
 
 	/**
-	 * @return
+	 * @return get b
 	 */
 	public double getB() {
 		return b;
@@ -107,7 +108,7 @@ public class Quadratic implements Comparable<Quadratic> {
 	}
 
 	/**
-	 * @return
+	 * @return get c
 	 */
 	public double getC() {
 		return c;

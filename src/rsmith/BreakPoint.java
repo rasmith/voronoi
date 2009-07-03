@@ -6,14 +6,14 @@ import java.awt.geom.Point2D;
  * @author agrippa
  * 
  */
-public class Breakpoint implements Comparable<Breakpoint>, VoronoiPoint {
+public class BreakPoint extends AbstractPoint implements
+		Comparable<BreakPoint>, VoronoiPoint {
 
-	private Breakpoint previous;
-	private Breakpoint next;
-	private Site left;
-	private Site right;
+	private BreakPoint previous;
+	private BreakPoint next;
+	private SitePoint left;
+	private SitePoint right;
 	private Point2D position;
-	private Voronoi voronoi;
 
 	/**
 	 * @param previous
@@ -21,72 +21,77 @@ public class Breakpoint implements Comparable<Breakpoint>, VoronoiPoint {
 	 * @param left
 	 * @param right
 	 */
-	public Breakpoint(Breakpoint previous, Breakpoint next, Site left,
-			Site right) {
+	public BreakPoint(BreakPoint previous, BreakPoint next, SitePoint left,
+			SitePoint right) {
 		this.setPrevious(previous);
 		this.setNext(next);
 		this.left = left;
 		this.right = right;
 	}
+	
+	public BreakPoint() {}
 
 	/**
 	 * @param previous
 	 */
-	public void setPrevious(Breakpoint previous) {
+	public void setPrevious(BreakPoint previous) {
 		this.previous = previous;
 	}
 
 	/**
-	 * @return
+	 * @return the breakpoint that lies immediately to the left of this
+	 *         breakpoint on the beachline
 	 */
-	public Breakpoint getPrevious() {
+	public BreakPoint getPrevious() {
 		return previous;
 	}
 
 	/**
 	 * @param next
 	 */
-	public void setNext(Breakpoint next) {
+	public void setNext(BreakPoint next) {
 		this.next = next;
 	}
 
 	/**
-	 * @return
+	 * @return the breakpoint immediately to the right of this breakpoint
 	 */
-	public Breakpoint getNext() {
+	public BreakPoint getNext() {
 		return next;
 	}
 
 	/**
-	 * @return
+	 * @return the site that generates the parabola on the beachline that lies
+	 *         immediately to the right of this breakpoint
 	 */
-	public Site getLeft() {
+	public SitePoint getLeft() {
 		return left;
 	}
 
 	/**
 	 * @param left
 	 */
-	public void setLeft(Site left) {
+	public void setLeft(SitePoint left) {
 		this.left = left;
 	}
 
 	/**
-	 * @return
+	 * @return the site that generates the parabola on the beachline that lies
+	 *         immediately to the right of this breakpoint
 	 */
-	public Site getRight() {
+	public SitePoint getRight() {
 		return right;
 	}
 
 	/**
 	 * @param right
 	 */
-	public void setRight(Site right) {
+	public void setRight(SitePoint right) {
 		this.right = right;
 	}
 
 	/**
-	 * @return
+	 * @return the current (x,y) coordinate of this breakpoint
 	 */
 	public Point2D getPosition() {
 		updatePosition();
@@ -101,7 +106,7 @@ public class Breakpoint implements Comparable<Breakpoint>, VoronoiPoint {
 	}
 
 	@Override
-	public int compareTo(Breakpoint bp) {
+	public int compareTo(BreakPoint bp) {
 		return PointUtils.comparePointsX(this.getPosition(), bp.getPosition());
 	}
 
@@ -109,9 +114,9 @@ public class Breakpoint implements Comparable<Breakpoint>, VoronoiPoint {
 	 * @param sweep
 	 */
 	private void updatePosition() {
-		double sweep = voronoi.getSweepY();
-		Quadratic qLeft = left.getQuadratic(sweep);
-		Quadratic qRight = right.getQuadratic(sweep);
+		double sweep = getNode().getFortuneData().getSweepY();
+		Quadratic qLeft = left.createQuadratic(sweep);
+		Quadratic qRight = right.createQuadratic(sweep);
 		double[] roots = qLeft.intersect(qRight);
 		if (roots != null) {
 			double x1 = roots[0];
@@ -149,23 +154,15 @@ public class Breakpoint implements Comparable<Breakpoint>, VoronoiPoint {
 			return true;
 		if (obj == null)
 			return false;
-		if (!(obj instanceof Breakpoint))
+		if (!(obj instanceof BreakPoint))
 			return false;
-		Breakpoint other = (Breakpoint) obj;
+		BreakPoint other = (BreakPoint) obj;
 		if (position == null) {
 			if (other.position != null)
 				return false;
 		} else if (!position.equals(other.position))
 			return false;
 		return true;
-	}
-
-	public void setVoronoi(Voronoi voronoi) {
-		this.voronoi = voronoi;
-	}
-
-	public Voronoi getVoronoi() {
-		return voronoi;
 	}
 
 }

@@ -6,22 +6,27 @@ import java.awt.geom.Point2D;
  * @author agrippa
  * 
  */
-public class Site implements Comparable<Site>, VoronoiPoint {
+public class SitePoint extends AbstractPoint implements Comparable<SitePoint>,
+		VoronoiPoint {
 
 	private Point2D position;
 
 	/**
 	 * @param p
 	 */
-	public Site(Point2D p) {
+	public SitePoint(Point2D p) {
 		position = p;
+	}
+	
+	public SitePoint() {
+		
 	}
 
 	/**
 	 * @param sweep
-	 * @return
+	 * @return creates a quadratic w.r.t. the sweep at value sweep
 	 */
-	public Quadratic getQuadratic(double sweep) {
+	public Quadratic createQuadratic(double sweep) {
 		double x = position.getX();
 		double y = position.getY();
 		double d = 2 * (y - sweep);
@@ -33,7 +38,7 @@ public class Site implements Comparable<Site>, VoronoiPoint {
 	}
 
 	/**
-	 * @return
+	 * @return (x,y) coordinate of this site
 	 */
 	public Point2D getPosition() {
 		return position;
@@ -73,7 +78,7 @@ public class Site implements Comparable<Site>, VoronoiPoint {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Site other = (Site) obj;
+		SitePoint other = (SitePoint) obj;
 		if (position == null) {
 			if (other.position != null)
 				return false;
@@ -83,7 +88,7 @@ public class Site implements Comparable<Site>, VoronoiPoint {
 	}
 
 	@Override
-	public int compareTo(Site o) {
+	public int compareTo(SitePoint o) {
 		return PointUtils.comparePointsX(this.getPosition(), o.getPosition());
 	}
 }

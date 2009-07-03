@@ -1,19 +1,19 @@
 package rsmith;
 
 public abstract class AbstractSweepEvent implements SweepEvent {
-	private Voronoi voronoi;
+	private FortuneData fortuneData;
 
 	public int compareTo(SweepEvent se) {
-		double y1 = getY();
-		double y2 = se.getY();
+		double y1 = getEventY();
+		double y2 = se.getEventY();
 		return (y1 < y2 ? -1 : (y1 > y2 ? 1 : 0));
 	}
 
-	public Voronoi getVoronoi() {
-		return voronoi;
+	public FortuneData getFortuneData() {
+		return fortuneData;
 	}
 
-	public void setVoronoi(Voronoi voronoi) {
-		this.voronoi = voronoi;
+	public void setFortuneData(FortuneData fortuneData) {
+		this.fortuneData = fortuneData;
 	}
 }

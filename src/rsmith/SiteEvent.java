@@ -2,21 +2,21 @@ package rsmith;
 
 public class SiteEvent extends AbstractSweepEvent implements SweepEvent {
 
-	private Site site;
+	private SitePoint site;
 
-	public SiteEvent(Site s) {
+	public SiteEvent(SitePoint s) {
 		site = s;
 	}
 
-	public double getY() {
+	public double getEventY() {
 		return site.getPosition().getY();
 	}
 
-	public Site getSite() {
+	public SitePoint getSite() {
 		return site;
 	}
 
-	public void setSite(Site site) {
+	public void setSite(SitePoint site) {
 		this.site = site;
 	}
 

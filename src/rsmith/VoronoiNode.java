@@ -1,11 +1,13 @@
 package rsmith;
 
 import java.awt.geom.Point2D;
+import java.util.SortedSet;
 
 public class VoronoiNode implements Comparable<VoronoiNode> {
 	private VoronoiPoint point = null;
 	private SweepEvent event = null;
-	
+	private FortuneData fortuneData = null;
+
 	public VoronoiNode(VoronoiPoint point, SweepEvent event) {
 		this.point = point;
 		this.event = event;
@@ -21,19 +23,35 @@ public class VoronoiNode implements Comparable<VoronoiNode> {
 		return PointUtils.comparePointsX(p, q);
 	}
 
-    public void setEvent(SweepEvent event) {
-        this.event = event;
-    }
+	public void setEvent(SweepEvent event) {
+		this.event = event;
+	}
 
-    public SweepEvent getEvent() {
-        return event;
-    }
+	public SweepEvent getEvent() {
+		return event;
+	}
 
-    public VoronoiPoint getPoint() {
-        return point;
-    }
+	public VoronoiPoint getPoint() {
+		return point;
+	}
 
-    public void setPoint(VoronoiPoint point) {
-        this.point = point;
-    }
+	public void setPoint(VoronoiPoint point) {
+		this.point = point;
+	}
+
+	/**
+	 * @return the voronoi
+	 */
+	public FortuneData getFortuneData() {
+		return fortuneData;
+	}
+
+	/**
+	 * @param voronoi
+	 *            the voronoi to set
+	 */
+	public void setFortuneData(FortuneData voronoi) {
+		this.fortuneData = voronoi;
+	}
+
 }

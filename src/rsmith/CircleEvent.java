@@ -8,13 +8,14 @@ public class CircleEvent extends AbstractSweepEvent implements SweepEvent {
 	private double eventY;
 	private Point2D center;
 	private double radius;
-	private Breakpoint leftBP;
-	private Breakpoint rightBP;
-	private Site pi;
-	private Site pj;
-	private Site pk;
+	private BreakPoint leftBP;
+	private BreakPoint rightBP;
+	private SitePoint pi;
+	private SitePoint pj;
+	private SitePoint pk;
 
-	public CircleEvent(Point2D center, double radius, Site pi, Site pj, Site pk) {
+	public CircleEvent(Point2D center, double radius, SitePoint pi,
+			SitePoint pj, SitePoint pk) {
 		this.center = center;
 		this.pi = pi;
 		this.pj = pj;
@@ -24,7 +25,7 @@ public class CircleEvent extends AbstractSweepEvent implements SweepEvent {
 		this.eventPoint = new Point2D.Double(center.getX(), eventY);
 	}
 
-	public double getY() {
+	public double getEventY() {
 		return eventY;
 	}
 
@@ -38,8 +39,8 @@ public class CircleEvent extends AbstractSweepEvent implements SweepEvent {
 		return result;
 	}
 
-	public static CircleEvent createCircleEvent(double sweep, Site pi, Site pj,
-			Site pk) {
+	public static CircleEvent createCircleEvent(double sweep, SitePoint pi,
+			SitePoint pj, SitePoint pk) {
 		CircleEvent result = null;
 		Point2D center = computeCircle(pi.getPosition(), pj.getPosition(), pk
 				.getPosition());
@@ -55,7 +56,7 @@ public class CircleEvent extends AbstractSweepEvent implements SweepEvent {
 	/**
 	 * @return the pi
 	 */
-	public Site getPi() {
+	public SitePoint getPi() {
 		return pi;
 	}
 
@@ -63,14 +64,14 @@ public class CircleEvent extends AbstractSweepEvent implements SweepEvent {
 	 * @param pi
 	 *            the pi to set
 	 */
-	public void setPi(Site pi) {
+	public void setPi(SitePoint pi) {
 		this.pi = pi;
 	}
 
 	/**
 	 * @return the pj
 	 */
-	public Site getPj() {
+	public SitePoint getPj() {
 		return pj;
 	}
 
@@ -78,14 +79,14 @@ public class CircleEvent extends AbstractSweepEvent implements SweepEvent {
 	 * @param pj
 	 *            the pj to set
 	 */
-	public void setPj(Site pj) {
+	public void setPj(SitePoint pj) {
 		this.pj = pj;
 	}
 
 	/**
 	 * @return the pk
 	 */
-	public Site getPk() {
+	public SitePoint getPk() {
 		return pk;
 	}
 
@@ -93,14 +94,14 @@ public class CircleEvent extends AbstractSweepEvent implements SweepEvent {
 	 * @param pk
 	 *            the pk to set
 	 */
-	public void setPk(Site pk) {
+	public void setPk(SitePoint pk) {
 		this.pk = pk;
 	}
 
 	/**
 	 * @return the leftBP
 	 */
-	public Breakpoint getLeftBP() {
+	public BreakPoint getLeftBP() {
 		return leftBP;
 	}
 
@@ -108,14 +109,14 @@ public class CircleEvent extends AbstractSweepEvent implements SweepEvent {
 	 * @param leftBP
 	 *            the leftBP to set
 	 */
-	public void setLeftBP(Breakpoint leftBP) {
+	public void setLeftBP(BreakPoint leftBP) {
 		this.leftBP = leftBP;
 	}
 
 	/**
 	 * @return the rightBP
 	 */
-	public Breakpoint getRightBP() {
+	public BreakPoint getRightBP() {
 		return rightBP;
 	}
 
@@ -123,7 +124,7 @@ public class CircleEvent extends AbstractSweepEvent implements SweepEvent {
 	 * @param rightBP
 	 *            the rightBP to set
 	 */
-	public void setRightBP(Breakpoint rightBP) {
+	public void setRightBP(BreakPoint rightBP) {
 		this.rightBP = rightBP;
 	}
 
