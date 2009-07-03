@@ -11,19 +11,6 @@ public class FortuneAlgorithm {
 		fortuneData = new FortuneData(points);
 	}
 	
-	/**
-	 * @return the fortuneData
-	 */
-	public FortuneData getFortuneData() {
-		return fortuneData;
-	}
-	/**
-	 * @param fortuneData the fortuneData to set
-	 */
-	public void setFortuneData(FortuneData fortuneData) {
-		this.fortuneData = fortuneData;
-	}
-	
 	public void init() {
 		Iterator<Point2D> iter = getFortuneData().getPoints().iterator();
 		while (iter.hasNext()) {
@@ -49,8 +36,10 @@ public class FortuneAlgorithm {
 	}
 
 	public void handleSiteEvent(SiteEvent se) {
-		if (getFortuneData().getBeachline().isEmpty()) {
-			getFortuneData().getBeachline().add(new VoronoiNode(se.getSite(), se));
+		FortuneData data = getFortuneData();
+		NavigableSet<VoronoiNode> beachline = data.getBeachline();
+		if (beachline.isEmpty()) {
+			beachline.add(new VoronoiNode(se.getSite(), se));
 			return;
 		}
 		SitePoint p = se.getSite();
@@ -62,15 +51,15 @@ public class FortuneAlgorithm {
 		if (getFortuneData().getBeachline().size() == 1) {
 			// if there is only one element in the tree
 			// then just remove it and get its point q
-			VoronoiNode vn = getFortuneData().getBeachline().first();
-			getFortuneData().getBeachline().remove(vn);
+			VoronoiNode vn = beachline.first();
+			beachline.remove(vn);
 			q = (SitePoint) vn.getPoint();
 		} else {
 			// if there is more than one element then
 			// get the breakpoints bl and br that
 			// lie immediately to the left and right of p
-			VoronoiNode before = getFortuneData().getBeachline().floor(vp); // this gets the nodes
-			VoronoiNode after = getFortuneData().getBeachline().ceiling(vp);
+			VoronoiNode before = beachline.floor(vp); // this gets the nodes
+			VoronoiNode after = beachline.ceiling(vp);
 			// get the corresponding breakpoints
 			bl = (BreakPoint) before.getPoint();
 			br = (BreakPoint) after.getPoint();
@@ -103,28 +92,30 @@ public class FortuneAlgorithm {
 		VoronoiNode vb1 = insertBreakPoint(b1,bl,b2,q,p);
 		VoronoiNode vb2 = insertBreakPoint(b2,b1,br,p,q);
 		
-		if(getFortuneData().getBeachline().size() > 2) {
+		if(beachline.size() > 2) {
 			insertCircleEvents(vb1, vb2);
 		}
 	}
 
 	private void insertSitePoint(Point2D p) {
+		FortuneData data = getFortuneData();
 		SitePoint s = new SitePoint(p);
-		getFortuneData().getSites().add(s);
+		data.getSites().add(s);
 		SiteEvent se = new SiteEvent(s);
-		se.setFortuneData(getFortuneData());
-		getFortuneData().getEventQueue().add(se);
+		se.setFortuneData(data);
+		data.getEventQueue().add(se);
 	}
 	
 	private VoronoiNode insertBreakPoint(BreakPoint b, BreakPoint previous, BreakPoint next, SitePoint left, SitePoint right) {
+		FortuneData data = getFortuneData();
 		b.setPrevious(previous);
 		b.setNext(next);
 		b.setLeft(left);
 		b.setRight(right);
 		VoronoiNode node = new VoronoiNode(b,null);
-		node.setFortuneData(getFortuneData());
+		node.setFortuneData(data);
 		b.setNode(node);
-		getFortuneData().getBeachline().add(node);
+		data.getBeachline().add(node);
 		return node;
 	}
 	
@@ -143,15 +134,30 @@ public class FortuneAlgorithm {
 	}
 
 	private void insertCircleEvent(BreakPoint left, BreakPoint right) {
-		CircleEvent c = CircleEvent.createCircleEvent(getFortuneData().getSweepY(), left.getLeft(), left.getRight(), right.getRight());
+		FortuneData data = getFortuneData();
+		CircleEvent c = CircleEvent.createCircleEvent(data.getSweepY(), left.getLeft(), left.getRight(), right.getRight());
 		c.setLeftBP(left);
 		c.setRightBP(right);
 		left.getNode().setEvent(c);
-		getFortuneData().getEventQueue().add(c);
+		data.getEventQueue().add(c);
 	}
 	
 	public void handleCircleEvent(CircleEvent ce) {
 		
 	}
+	
+	/**
+	 * @return the fortuneData
+	 */
+	public FortuneData getFortuneData() {
+		return fortuneData;
+	}
+	/**
+	 * @param fortuneData the fortuneData to set
+	 */
+	public void setFortuneData(FortuneData fortuneData) {
+		this.fortuneData = fortuneData;
+	}
+	
 	
 }
