@@ -6,7 +6,7 @@ import java.awt.geom.Point2D;
  * @author agrippa
  * 
  */
-public class Breakpoint implements Comparable<Breakpoint> {
+public class Breakpoint implements Comparable<Breakpoint>, VoronoiPoint {
 
 	private Breakpoint previous;
 	private Breakpoint next;
@@ -102,7 +102,7 @@ public class Breakpoint implements Comparable<Breakpoint> {
 
 	@Override
 	public int compareTo(Breakpoint bp) {
-		return PointUtils.comparePoints(this.getPosition(), bp.getPosition());
+		return PointUtils.comparePointsX(this.getPosition(), bp.getPosition());
 	}
 
 	/**
@@ -116,21 +116,22 @@ public class Breakpoint implements Comparable<Breakpoint> {
 		if (roots != null) {
 			double x1 = roots[0];
 			double x2 = roots[1];
-			if (x1 != x2) {	
+			if (x1 != x2) {
 				// (x1,y1) and (x2,y2) are the intersection points
 				// intersect should return x1 and x2 such that x1 < x2
 				// need to determine which parabola is lowest when x < x1
-				double half=x1/2;
-				double mid=(x1+x2)/2;
-				if(qLeft.eval(half) < qRight.eval(half) && qRight.eval(mid) < qLeft.eval(mid) ) {
-					double y1=qLeft.eval(x1);
-					setPosition(new Point2D.Double(x1,y1));
+				double half = x1 / 2;
+				double mid = (x1 + x2) / 2;
+				if (qLeft.eval(half) < qRight.eval(half)
+						&& qRight.eval(mid) < qLeft.eval(mid)) {
+					double y1 = qLeft.eval(x1);
+					setPosition(new Point2D.Double(x1, y1));
 				} else {
-					double y2=qLeft.eval(x2);
-					setPosition(new Point2D.Double(x2,y2));
+					double y2 = qLeft.eval(x2);
+					setPosition(new Point2D.Double(x2, y2));
 				}
 			}
-		}	
+		}
 	}
 
 	@Override

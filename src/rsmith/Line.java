@@ -11,14 +11,13 @@ public class Line {
 		this.m = m;
 		this.b = b;
 	}
-	
+
 	public static Line bisector(Point2D p, Point2D q) {
 		Line result = null;
-		double	px = p.getX(), py = p.getY(), 
-				qx = q.getX(), qy = q.getY();
-		double	diffx = px - qx;
-		double 	diffy = py - qy;
-		double m=0, b=0;
+		double px = p.getX(), py = p.getY(), qx = q.getX(), qy = q.getY();
+		double diffx = px - qx;
+		double diffy = py - qy;
+		double m = 0, b = 0;
 		if (diffx == 0 && diffy != 0) {
 			// one point is above another
 			// bisector is the horizontal line halfway between them
@@ -29,13 +28,12 @@ public class Line {
 			// bisector is the vertical line halfway between them
 			m = Double.POSITIVE_INFINITY; // vertical lines have infinite slope
 			b = (px + qx) / 2;
-		} else 
-		if(!(diffx == 0 && diffy == 0)){
+		} else if (!(diffx == 0 && diffy == 0)) {
 			// ensure that p != q
 			m = diffy / diffx;
-			b = py  - m * px;
+			b = py - m * px;
 		}
-		result = new Line(m,b);
+		result = new Line(m, b);
 		return result;
 	}
 

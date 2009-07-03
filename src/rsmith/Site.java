@@ -6,7 +6,7 @@ import java.awt.geom.Point2D;
  * @author agrippa
  * 
  */
-public class Site implements Comparable<Site> {
+public class Site implements Comparable<Site>, VoronoiPoint {
 
 	private Point2D position;
 
@@ -14,7 +14,7 @@ public class Site implements Comparable<Site> {
 	 * @param p
 	 */
 	public Site(Point2D p) {
-		position=p;
+		position = p;
 	}
 
 	/**
@@ -55,7 +55,8 @@ public class Site implements Comparable<Site> {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((position == null) ? 0 : position.hashCode());
+		result = prime * result
+				+ ((position == null) ? 0 : position.hashCode());
 		return result;
 	}
 
@@ -83,6 +84,6 @@ public class Site implements Comparable<Site> {
 
 	@Override
 	public int compareTo(Site o) {
-		return PointUtils.comparePoints(this.getPosition(), o.getPosition());
+		return PointUtils.comparePointsX(this.getPosition(), o.getPosition());
 	}
 }

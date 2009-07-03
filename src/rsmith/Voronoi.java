@@ -8,11 +8,11 @@ import java.util.TreeSet;
 public class Voronoi {
 
 	private PriorityQueue<SweepEvent> Q; // sort by y-value
-	private TreeSet<Breakpoint> breakpoints; // sort by x-value
+	private TreeSet<Breakpoint> beachline; // sort by x-value
 	private TreeSet<Site> sites;
 	private TreeSet<Point2D> points;
 	private double sweepY;
-	
+
 	/**
 	 * @param p
 	 */
@@ -22,8 +22,8 @@ public class Voronoi {
 
 	public void init() {
 		Iterator<Point2D> iter = points.iterator();
-		while(iter.hasNext()) {
-			Point2D p = (Point2D)iter.next();
+		while (iter.hasNext()) {
+			Point2D p = (Point2D) iter.next();
 			Site s = new Site(p);
 			sites.add(s);
 			SiteEvent se = new SiteEvent(s);
@@ -33,31 +33,35 @@ public class Voronoi {
 	}
 
 	public void step() {
-		if(!isFinished()) {
-			SweepEvent e = (SweepEvent)Q.remove();
-			if(e instanceof SiteEvent) {
-				handleSiteEvent((SiteEvent)e);
+		if (!isFinished()) {
+			SweepEvent e = (SweepEvent) Q.remove();
+			if (e instanceof SiteEvent) {
+				handleSiteEvent((SiteEvent) e);
 			} else {
-				handleCircleEvent((CircleEvent)e);
+				handleCircleEvent((CircleEvent) e);
 			}
 		}
 	}
-	
+
 	public boolean isFinished() {
 		return Q.isEmpty();
 	}
-	
+
 	public void handleSiteEvent(SiteEvent se) {
-		if(breakpoints.isEmpty()) {
-			
+		if (beachline.isEmpty()) {
 		} else {
+			if (beachline.size() == 1) {
+
+			} else {
+
+			}
 		}
 	}
-	
+
 	public void handleCircleEvent(CircleEvent ce) {
-		
+
 	}
-	
+
 	/**
 	 * @return the q
 	 */
@@ -85,8 +89,8 @@ public class Voronoi {
 	/**
 	 * @return
 	 */
-	public TreeSet<Breakpoint> getBreakpoints() {
-		return breakpoints;
+	public TreeSet<Breakpoint> getBeachline() {
+		return beachline;
 	}
 
 	/**
@@ -96,8 +100,8 @@ public class Voronoi {
 	/**
 	 * @param breakpoints
 	 */
-	public void setBreakpoints(TreeSet<Breakpoint> breakpoints) {
-		this.breakpoints = breakpoints;
+	public void setBeachline(TreeSet<Breakpoint> breakpoints) {
+		this.beachline = breakpoints;
 	}
 
 	/**

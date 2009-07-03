@@ -2,7 +2,7 @@ package rsmith;
 
 import java.awt.geom.Point2D;
 
-public class CircleEvent implements SweepEvent {
+public class CircleEvent extends AbstractSweepEvent implements SweepEvent {
 
 	private Point2D eventPoint;
 	private double eventY;
@@ -13,8 +13,7 @@ public class CircleEvent implements SweepEvent {
 	private Site pi;
 	private Site pj;
 	private Site pk;
-	private Voronoi voronoi;
-	
+
 	public CircleEvent(Point2D center, double radius, Site pi, Site pj, Site pk) {
 		this.center = center;
 		this.pi = pi;
@@ -24,7 +23,7 @@ public class CircleEvent implements SweepEvent {
 		this.eventY = center.getY() - radius;
 		this.eventPoint = new Point2D.Double(center.getX(), eventY);
 	}
-	
+
 	@Override
 	public double getY() {
 		return eventY;
@@ -32,26 +31,28 @@ public class CircleEvent implements SweepEvent {
 
 	public static Point2D computeCircle(Point2D pi, Point2D pj, Point2D pk) {
 		Point2D result = null;
-		if(pi.getX() <= pj.getX() && pj.getX() <= pk.getX()) {
+		if (pi.getX() <= pj.getX() && pj.getX() <= pk.getX()) {
 			Line l1 = Line.bisector(pi, pj);
 			Line l2 = Line.bisector(pj, pk);
 			result = l1.intersect(l2);
 		}
 		return result;
 	}
-	
-	public static CircleEvent createCircleEvent(double sweep, Site pi, Site pj, Site pk) {
+
+	public static CircleEvent createCircleEvent(double sweep, Site pi, Site pj,
+			Site pk) {
 		CircleEvent result = null;
-		Point2D center = computeCircle(pi.getPosition(),pj.getPosition(),pk.getPosition());
-		if(center != null) {
+		Point2D center = computeCircle(pi.getPosition(), pj.getPosition(), pk
+				.getPosition());
+		if (center != null) {
 			double radius = center.distance(pi.getPosition());
-			if(center.getY()-radius <= sweep) {
-				result = new CircleEvent(center, radius, pi,pj,pk);
+			if (center.getY() - radius <= sweep) {
+				result = new CircleEvent(center, radius, pi, pj, pk);
 			}
 		}
-		return result;		
+		return result;
 	}
-	
+
 	/**
 	 * @return the pi
 	 */
@@ -60,7 +61,8 @@ public class CircleEvent implements SweepEvent {
 	}
 
 	/**
-	 * @param pi the pi to set
+	 * @param pi
+	 *            the pi to set
 	 */
 	public void setPi(Site pi) {
 		this.pi = pi;
@@ -74,7 +76,8 @@ public class CircleEvent implements SweepEvent {
 	}
 
 	/**
-	 * @param pj the pj to set
+	 * @param pj
+	 *            the pj to set
 	 */
 	public void setPj(Site pj) {
 		this.pj = pj;
@@ -88,7 +91,8 @@ public class CircleEvent implements SweepEvent {
 	}
 
 	/**
-	 * @param pk the pk to set
+	 * @param pk
+	 *            the pk to set
 	 */
 	public void setPk(Site pk) {
 		this.pk = pk;
@@ -102,7 +106,8 @@ public class CircleEvent implements SweepEvent {
 	}
 
 	/**
-	 * @param leftBP the leftBP to set
+	 * @param leftBP
+	 *            the leftBP to set
 	 */
 	public void setLeftBP(Breakpoint leftBP) {
 		this.leftBP = leftBP;
@@ -116,7 +121,8 @@ public class CircleEvent implements SweepEvent {
 	}
 
 	/**
-	 * @param rightBP the rightBP to set
+	 * @param rightBP
+	 *            the rightBP to set
 	 */
 	public void setRightBP(Breakpoint rightBP) {
 		this.rightBP = rightBP;
@@ -130,7 +136,8 @@ public class CircleEvent implements SweepEvent {
 	}
 
 	/**
-	 * @param eventPoint the eventPoint to set
+	 * @param eventPoint
+	 *            the eventPoint to set
 	 */
 	public void setEventPoint(Point2D eventPoint) {
 		this.eventPoint = eventPoint;
@@ -144,7 +151,8 @@ public class CircleEvent implements SweepEvent {
 	}
 
 	/**
-	 * @param center the center to set
+	 * @param center
+	 *            the center to set
 	 */
 	public void setCenter(Point2D center) {
 		this.center = center;
@@ -158,18 +166,10 @@ public class CircleEvent implements SweepEvent {
 	}
 
 	/**
-	 * @param radius the radius to set
+	 * @param radius
+	 *            the radius to set
 	 */
 	public void setRadius(double radius) {
 		this.radius = radius;
 	}
-
-	public Voronoi getVoronoi() {
-		return voronoi;
-	}
-
-	public void setVoronoi(Voronoi voronoi) {
-		this.voronoi = voronoi;
-	}
-
 }

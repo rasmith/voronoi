@@ -1,6 +1,6 @@
 package rsmith;
 
-public class SiteEvent implements SweepEvent {
+public class SiteEvent extends AbstractSweepEvent implements SweepEvent  {
 
 	private Site site;
 	private Voronoi voronoi;
@@ -29,6 +29,5 @@ public class SiteEvent implements SweepEvent {
 	public void setVoronoi(Voronoi voronoi) {
 		this.voronoi = voronoi;
 	}
-
 	
 }
