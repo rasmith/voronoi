@@ -1,14 +1,13 @@
 package rsmith;
 
-public class SiteEvent extends AbstractSweepEvent implements SweepEvent  {
+public class SiteEvent extends AbstractSweepEvent implements SweepEvent {
 
 	private Site site;
-	private Voronoi voronoi;
-	
+
 	public SiteEvent(Site s) {
 		site = s;
 	}
-	
+
 	@Override
 	public double getY() {
 		return site.getPosition().getY();
@@ -22,12 +21,4 @@ public class SiteEvent extends AbstractSweepEvent implements SweepEvent  {
 		this.site = site;
 	}
 
-	public Voronoi getVoronoi() {
-		return voronoi;
-	}
-
-	public void setVoronoi(Voronoi voronoi) {
-		this.voronoi = voronoi;
-	}
-	
 }

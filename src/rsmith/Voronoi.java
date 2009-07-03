@@ -7,8 +7,8 @@ import java.util.TreeSet;
 
 public class Voronoi {
 
-	private PriorityQueue<SweepEvent> Q; // sort by y-value
-	private TreeSet<Breakpoint> beachline; // sort by x-value
+	private PriorityQueue<SweepEvent> eventQueue;
+	private TreeSet<VoronoiNode> beachline;
 	private TreeSet<Site> sites;
 	private TreeSet<Point2D> points;
 	private double sweepY;
@@ -28,13 +28,13 @@ public class Voronoi {
 			sites.add(s);
 			SiteEvent se = new SiteEvent(s);
 			se.setVoronoi(this);
-			Q.add(se);
+			eventQueue.add(se);
 		}
 	}
 
 	public void step() {
 		if (!isFinished()) {
-			SweepEvent e = (SweepEvent) Q.remove();
+			SweepEvent e = (SweepEvent) eventQueue.remove();
 			if (e instanceof SiteEvent) {
 				handleSiteEvent((SiteEvent) e);
 			} else {
@@ -44,7 +44,7 @@ public class Voronoi {
 	}
 
 	public boolean isFinished() {
-		return Q.isEmpty();
+		return eventQueue.isEmpty();
 	}
 
 	public void handleSiteEvent(SiteEvent se) {
@@ -68,8 +68,8 @@ public class Voronoi {
 	/**
 	 * @return
 	 */
-	public PriorityQueue<SweepEvent> getQ() {
-		return Q;
+	public PriorityQueue<SweepEvent> getEventQueue() {
+		return eventQueue;
 	}
 
 	/**
@@ -79,8 +79,8 @@ public class Voronoi {
 	/**
 	 * @param q
 	 */
-	public void setQ(PriorityQueue<SweepEvent> q) {
-		Q = q;
+	public void setEventQueue(PriorityQueue<SweepEvent> q) {
+		eventQueue = q;
 	}
 
 	/**
@@ -89,7 +89,7 @@ public class Voronoi {
 	/**
 	 * @return
 	 */
-	public TreeSet<Breakpoint> getBeachline() {
+	public TreeSet<VoronoiNode> getBeachline() {
 		return beachline;
 	}
 
@@ -100,8 +100,8 @@ public class Voronoi {
 	/**
 	 * @param breakpoints
 	 */
-	public void setBeachline(TreeSet<Breakpoint> breakpoints) {
-		this.beachline = breakpoints;
+	public void setBeachline(TreeSet<VoronoiNode> beachline) {
+		this.beachline = beachline;
 	}
 
 	/**
