@@ -8,7 +8,6 @@ public class SiteEvent extends AbstractSweepEvent implements SweepEvent {
 		site = s;
 	}
 
-	@Override
 	public double getY() {
 		return site.getPosition().getY();
 	}

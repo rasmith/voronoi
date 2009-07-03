@@ -24,7 +24,6 @@ public class CircleEvent extends AbstractSweepEvent implements SweepEvent {
 		this.eventPoint = new Point2D.Double(center.getX(), eventY);
 	}
 
-	@Override
 	public double getY() {
 		return eventY;
 	}
