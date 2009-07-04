@@ -1,7 +1,6 @@
 package rsmith;
 
 import java.awt.geom.Point2D;
-import java.util.SortedSet;
 
 public class VoronoiNode implements Comparable<VoronoiNode> {
 	private VoronoiPoint point = null;
