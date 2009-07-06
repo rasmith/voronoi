@@ -13,8 +13,9 @@ public class BreakPoint extends AbstractPoint implements
 	private BreakPoint next;
 	private SitePoint left;
 	private SitePoint right;
-	private Point2D position;
-
+	private Point2D position=null;
+	private double lastSweepY;
+	
 	/**
 	 * @param previous
 	 * @param next
@@ -94,7 +95,11 @@ public class BreakPoint extends AbstractPoint implements
 	 * @return the current (x,y) coordinate of this breakpoint
 	 */
 	public Point2D getPosition() {
-		updatePosition();
+		double sweepY= getNode().getFortuneData().getSweepY();
+		if(position==null || sweepY != lastSweepY) {
+			lastSweepY = sweepY;
+			updatePosition();
+		}
 		return position;
 	}
 
@@ -114,7 +119,7 @@ public class BreakPoint extends AbstractPoint implements
 	 * @param sweep
 	 */
 	private void updatePosition() {
-		double sweep = getNode().getFortuneData().getSweepY();
+		double sweep = lastSweepY;
 		Quadratic qLeft = left.createQuadratic(sweep);
 		Quadratic qRight = right.createQuadratic(sweep);
 		double[] roots = qLeft.intersect(qRight);
@@ -164,5 +169,5 @@ public class BreakPoint extends AbstractPoint implements
 			return false;
 		return true;
 	}
-
+	
 }

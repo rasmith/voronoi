@@ -92,6 +92,8 @@ public class FortuneAlgorithm {
 		VoronoiNode vb1 = insertBreakPoint(b1,bl,b2,q,p);
 		VoronoiNode vb2 = insertBreakPoint(b2,b1,br,p,q);
 		
+		fixCircleEvent(bl,br);
+		
 		if(beachline.size() > 2) {
 			insertCircleEvents(vb1, vb2);
 		}
@@ -140,6 +142,15 @@ public class FortuneAlgorithm {
 		c.setRightBP(right);
 		left.getNode().setEvent(c);
 		data.getEventQueue().add(c);
+	}
+	
+	private void fixCircleEvent(BreakPoint left, BreakPoint right) {
+		if(left != null && right != null) {
+			VoronoiNode node = left.getNode();
+			CircleEvent event = (CircleEvent)node.getEvent();
+			node.setEvent(null);
+			node.getFortuneData().getEventQueue().remove(event);
+		}
 	}
 	
 	public void handleCircleEvent(CircleEvent ce) {
