@@ -141,10 +141,12 @@ public class FortuneAlgorithm {
 	    }
 		FortuneData data = getFortuneData();
 		CircleEvent c = CircleEvent.createCircleEvent(data.getSweepY(), left.getLeft(), left.getRight(), right.getRight());
-		c.setLeftBP(left);
-		c.setRightBP(right);
-		left.getNode().setEvent(c);
-		data.getEventQueue().add(c);
+		if(c != null) {
+			c.setLeftBP(left);
+			c.setRightBP(right);
+			left.getNode().setEvent(c);
+			data.getEventQueue().add(c);
+		}
 	}
 	
 	private void fixCircleEvent(BreakPoint left, BreakPoint right) {
@@ -156,21 +158,49 @@ public class FortuneAlgorithm {
 		}
 	}
 	
+	private void clearCircleEvent(BreakPoint b) {
+		if(b != null) {
+			VoronoiNode node = b.getNode();
+			CircleEvent event = (CircleEvent)node.getEvent();
+			if(event != null) {
+				node.getFortuneData().getEventQueue().remove(event);
+				node.setEvent(null);
+			}
+		}
+	}
+	
 	public void handleCircleEvent(CircleEvent ce) {
 	    FortuneData data = this.getFortuneData();
 	    NavigableSet<VoronoiNode> beachline = data.getBeachline();
+	    
+	    // the breakpoints representing the disappearing arc
 		BreakPoint leftBP = ce.getLeftBP();
 		BreakPoint rightBP = ce.getRightBP();
+		
+		// the breakpoints that lie to the left and right of this arc
 		BreakPoint previous = leftBP.getPrevious();
 		BreakPoint next = rightBP.getNext();
+		
+		// the sites that generate the arcs lying to the left and right
+		// of the disappearing arc
 		SitePoint left = leftBP.getLeft();
 		SitePoint right = rightBP.getRight();
+		
+		// effectively remove this arc
 		beachline.remove(leftBP);
 		beachline.remove(rightBP);
+		
+		// check to see if the current arc has any other current circle events
+		clearCircleEvent(previous);
+		clearCircleEvent(rightBP);
+		
 		BreakPoint b = new BreakPoint();
 		this.insertBreakPoint(b, previous, next, left, right);
 		
-		insertCircleEvent(previous,b);
+		assert(b.getPrevious() == previous && b.getNext() == next);
+		
+		// insert the two new circle events 
+		insertCircleEvent(previous, b);
 		insertCircleEvent(b,next);
 	}
 	
