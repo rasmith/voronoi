@@ -136,6 +136,9 @@ public class FortuneAlgorithm {
 	}
 
 	private void insertCircleEvent(BreakPoint left, BreakPoint right) {
+	    if(left == null || right == null) {
+	        return;
+	    }
 		FortuneData data = getFortuneData();
 		CircleEvent c = CircleEvent.createCircleEvent(data.getSweepY(), left.getLeft(), left.getRight(), right.getRight());
 		c.setLeftBP(left);
@@ -154,7 +157,21 @@ public class FortuneAlgorithm {
 	}
 	
 	public void handleCircleEvent(CircleEvent ce) {
+	    FortuneData data = this.getFortuneData();
+	    NavigableSet<VoronoiNode> beachline = data.getBeachline();
+		BreakPoint leftBP = ce.getLeftBP();
+		BreakPoint rightBP = ce.getRightBP();
+		BreakPoint previous = leftBP.getPrevious();
+		BreakPoint next = rightBP.getNext();
+		SitePoint left = leftBP.getLeft();
+		SitePoint right = rightBP.getRight();
+		beachline.remove(leftBP);
+		beachline.remove(rightBP);
+		BreakPoint b = new BreakPoint();
+		this.insertBreakPoint(b, previous, next, left, right);
 		
+		insertCircleEvent(previous,b);
+		insertCircleEvent(b,next);
 	}
 	
 	/**

@@ -1,0 +1,29 @@
+
+
+-------------- This line and the following will be ignored --------------
+
+removed:
+  bin/rsmith/
+  bin/rsmith/AbstractPoint.class
+  bin/rsmith/AbstractSweepEvent.class
+  bin/rsmith/BreakPoint.class
+  bin/rsmith/CircleEvent.class
+  bin/rsmith/FortuneAlgorithm.class
+  bin/rsmith/FortuneData.class
+  bin/rsmith/Line.class
+  bin/rsmith/PointUtils.class
+  bin/rsmith/Quadratic.class
+  bin/rsmith/SiteEvent.class
+  bin/rsmith/SitePoint.class
+  bin/rsmith/SweepEvent.class
+  bin/rsmith/VoronoiNode.class
+  bin/rsmith/VoronoiPoint.class
+added:
+  .settings/
+  .settings/org.eclipse.jdt.core.prefs
+  src/rsmith/VoronoiToken.java
+modified:
+  src/rsmith/FortuneData.java
+  src/rsmith/VoronoiNode.java
+unknown:
+  bin/rsmith/
