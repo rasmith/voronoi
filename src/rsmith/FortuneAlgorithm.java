@@ -6,22 +6,23 @@ import java.util.NavigableSet;
 
 public class FortuneAlgorithm {
 	private FortuneData fortuneData = null;
-	
+
 	public FortuneAlgorithm(NavigableSet<Point2D> points) {
 		fortuneData = new FortuneData(points);
 	}
-	
+
 	public void init() {
 		Iterator<Point2D> iter = getFortuneData().getPoints().iterator();
 		while (iter.hasNext()) {
 			Point2D p = (Point2D) iter.next();
-			insertSitePoint(p);
+			fortuneData.insertSitePoint(p);
 		}
 	}
 
 	public void step() {
 		if (!isFinished()) {
-			SweepEvent e = (SweepEvent) getFortuneData().getEventQueue().remove();
+			SweepEvent e = (SweepEvent) getFortuneData().getEventQueue()
+					.remove();
 			getFortuneData().setSweepY(e.getEventY());
 			if (e instanceof SiteEvent) {
 				handleSiteEvent((SiteEvent) e);
@@ -36,10 +37,10 @@ public class FortuneAlgorithm {
 	}
 
 	public void handleSiteEvent(SiteEvent se) {
-		FortuneData data = getFortuneData();
-		NavigableSet<VoronoiNode> beachline = data.getBeachline();
+		NavigableSet<VoronoiNode> beachline = fortuneData.getBeachline();
+
 		if (beachline.isEmpty()) {
-			beachline.add(new VoronoiNode(se.getSite(), se));
+			beachline.add(new VoronoiNode(se.getSite(), null));
 			return;
 		}
 		SitePoint p = se.getSite();
@@ -51,8 +52,8 @@ public class FortuneAlgorithm {
 		if (getFortuneData().getBeachline().size() == 1) {
 			// if there is only one element in the tree
 			// then just remove it and get its point q
-			VoronoiNode vn = beachline.first();
-			beachline.remove(vn);
+			VoronoiNode vn = fortuneData.getBeachline().first();
+			fortuneData.getBeachline().remove(vn);
 			q = (SitePoint) vn.getPoint();
 		} else {
 			// if there is more than one element then
@@ -88,134 +89,71 @@ public class FortuneAlgorithm {
 		// create the two new breakpoints that will intersect this arc
 		BreakPoint b1 = new BreakPoint();
 		BreakPoint b2 = new BreakPoint();
-		
-		VoronoiNode vb1 = insertBreakPoint(b1,bl,b2,q,p);
-		VoronoiNode vb2 = insertBreakPoint(b2,b1,br,p,q);
-		
-		fixCircleEvent(bl,br);
-		
-		if(beachline.size() > 2) {
-			insertCircleEvents(vb1, vb2);
+
+		VoronoiNode vb1 = fortuneData.insertBreakPoint(b1, bl, b2, q, p);
+		VoronoiNode vb2 = fortuneData.insertBreakPoint(b2, b1, br, p, q);
+
+		fixCircleEvent(bl, br);
+
+		if (beachline.size() > 2) {
+			fortuneData.insertCircleEvents(vb1, vb2);
 		}
 	}
 
-	private void insertSitePoint(Point2D p) {
-		FortuneData data = getFortuneData();
-		SitePoint s = new SitePoint(p);
-		data.getSites().add(s);
-		SiteEvent se = new SiteEvent(s);
-		se.setFortuneData(data);
-		data.getEventQueue().add(se);
-	}
-	
-	private VoronoiNode insertBreakPoint(BreakPoint b, BreakPoint previous, BreakPoint next, SitePoint left, SitePoint right) {
-		FortuneData data = getFortuneData();
-		b.setPrevious(previous);
-		b.setNext(next);
-		b.setLeft(left);
-		b.setRight(right);
-		VoronoiNode node = new VoronoiNode(b,null);
-		node.setFortuneData(data);
-		b.setNode(node);
-		data.getBeachline().add(node);
-		return node;
-	}
-	
-	private void insertCircleEvents(VoronoiNode vb1, VoronoiNode vb2) {
-		// see if there is an arc before the one in between b1 and b2
-		BreakPoint b1 = (BreakPoint) vb1.getPoint();
-		BreakPoint b2 = (BreakPoint) vb2.getPoint();
-		BreakPoint bl = b1.getPrevious();
-		BreakPoint br = b1.getNext();
-		if(bl != null) {
-			insertCircleEvent(bl,b1);
-		}
-		if(br != null) {
-			insertCircleEvent(b2, br);
-		}
-	}
-
-	private void insertCircleEvent(BreakPoint left, BreakPoint right) {
-	    if(left == null || right == null) {
-	        return;
-	    }
-		FortuneData data = getFortuneData();
-		CircleEvent c = CircleEvent.createCircleEvent(data.getSweepY(), left.getLeft(), left.getRight(), right.getRight());
-		if(c != null) {
-			c.setLeftBP(left);
-			c.setRightBP(right);
-			left.getNode().setEvent(c);
-			data.getEventQueue().add(c);
-		}
-	}
-	
 	private void fixCircleEvent(BreakPoint left, BreakPoint right) {
-		if(left != null && right != null) {
+		if (left != null && right != null) {
 			VoronoiNode node = left.getNode();
-			CircleEvent event = (CircleEvent)node.getEvent();
-			node.setEvent(null);
-			node.getFortuneData().getEventQueue().remove(event);
+			CircleEvent event = node.getCircleEvent();
+			node.setCircleEvent(null);
+			fortuneData.getEventQueue().remove(event);
 		}
 	}
-	
-	private void clearCircleEvent(BreakPoint b) {
-		if(b != null) {
-			VoronoiNode node = b.getNode();
-			CircleEvent event = (CircleEvent)node.getEvent();
-			if(event != null) {
-				node.getFortuneData().getEventQueue().remove(event);
-				node.setEvent(null);
-			}
-		}
-	}
-	
+
 	public void handleCircleEvent(CircleEvent ce) {
-	    FortuneData data = this.getFortuneData();
-	    NavigableSet<VoronoiNode> beachline = data.getBeachline();
-	    
-	    // the breakpoints representing the disappearing arc
+		// the breakpoints representing the disappearing arc
 		BreakPoint leftBP = ce.getLeftBP();
 		BreakPoint rightBP = ce.getRightBP();
-		
+
 		// the breakpoints that lie to the left and right of this arc
 		BreakPoint previous = leftBP.getPrevious();
 		BreakPoint next = rightBP.getNext();
-		
+
 		// the sites that generate the arcs lying to the left and right
 		// of the disappearing arc
 		SitePoint left = leftBP.getLeft();
 		SitePoint right = rightBP.getRight();
-		
+
 		// effectively remove this arc
-		beachline.remove(leftBP);
-		beachline.remove(rightBP);
-		
+		fortuneData.removeBreakPoint(leftBP);
+		fortuneData.removeBreakPoint(rightBP);
+
 		// check to see if the current arc has any other current circle events
-		clearCircleEvent(previous);
-		clearCircleEvent(rightBP);
-		
+		fortuneData.clearCircleEvent(previous);
+		fortuneData.clearCircleEvent(rightBP);
+
 		BreakPoint b = new BreakPoint();
-		this.insertBreakPoint(b, previous, next, left, right);
-		
-		assert(b.getPrevious() == previous && b.getNext() == next);
-		
-		// insert the two new circle events 
-		insertCircleEvent(previous, b);
-		insertCircleEvent(b,next);
+		fortuneData.insertBreakPoint(b, previous, next, left, right);
+
+		assert (b.getPrevious() == previous && b.getNext() == next);
+
+		// insert the two new circle events
+		fortuneData.insertCircleEvent(previous, b);
+		fortuneData.insertCircleEvent(b, next);
 	}
-	
+
 	/**
 	 * @return the fortuneData
 	 */
 	public FortuneData getFortuneData() {
 		return fortuneData;
 	}
+
 	/**
-	 * @param fortuneData the fortuneData to set
+	 * @param fortuneData
+	 *            the fortuneData to set
 	 */
 	public void setFortuneData(FortuneData fortuneData) {
 		this.fortuneData = fortuneData;
 	}
-	
-	
+
 }

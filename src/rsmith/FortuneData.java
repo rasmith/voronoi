@@ -84,11 +84,107 @@ public class FortuneData {
 		this.points = points;
 	}
 
+	/**
+	 * @return returns the current y-value of the sweep line
+	 */
 	public double getSweepY() {
 		return sweepY;
 	}
 
+	/**
+	 * @param sweepY
+	 */
 	public void setSweepY(double sweepY) {
 		this.sweepY = sweepY;
+	}
+
+	/**
+	 * @param p
+	 */
+	public void insertSitePoint(Point2D p) {
+		SitePoint s = new SitePoint(p);
+		sites.add(s);
+		SiteEvent se = new SiteEvent(s);
+		se.setFortuneData(this);
+		eventQueue.add(se);
+	}
+
+	/**
+	 * @param b
+	 * @param previous
+	 * @param next
+	 * @param left
+	 * @param right
+	 * @return
+	 */
+	public VoronoiNode insertBreakPoint(BreakPoint b, BreakPoint previous,
+			BreakPoint next, SitePoint left, SitePoint right) {
+		b.setPrevious(previous);
+		b.setNext(next);
+		b.setLeft(left);
+		b.setRight(right);
+		VoronoiNode node = new VoronoiNode(b, null);
+		node.setFortuneData(this);
+		b.setNode(node);
+		beachline.add(node);
+		return node;
+	}
+
+	/**
+	 * @param b
+	 */
+	public void removeBreakPoint(BreakPoint b) {
+		beachline.remove(b.getNode());
+	}
+
+	/**
+	 * @param vb1
+	 * @param vb2
+	 */
+	public void insertCircleEvents(VoronoiNode vb1, VoronoiNode vb2) {
+		// see if there is an arc before the one in between b1 and b2
+		BreakPoint b1 = (BreakPoint) vb1.getPoint();
+		BreakPoint b2 = (BreakPoint) vb2.getPoint();
+		BreakPoint bl = b1.getPrevious();
+		BreakPoint br = b1.getNext();
+		if (bl != null) {
+			insertCircleEvent(bl, b1);
+		}
+		if (br != null) {
+			insertCircleEvent(b2, br);
+		}
+	}
+
+	/**
+	 * @param left
+	 * @param right
+	 */
+	public void insertCircleEvent(BreakPoint left, BreakPoint right) {
+		if (left == null || right == null) {
+			return;
+		}
+
+		CircleEvent c = CircleEvent.createCircleEvent(sweepY, left.getLeft(),
+				left.getRight(), right.getRight());
+		if (c != null) {
+			c.setLeftBP(left);
+			c.setRightBP(right);
+			left.getNode().setCircleEvent(c);
+			eventQueue.add(c);
+		}
+	}
+
+	/**
+	 * @param b
+	 */
+	public void clearCircleEvent(BreakPoint b) {
+		if (b != null) {
+			VoronoiNode node = b.getNode();
+			CircleEvent event = node.getCircleEvent();
+			if (event != null) {
+				eventQueue.remove(event);
+				node.setCircleEvent(null);
+			}
+		}
 	}
 }

@@ -17,9 +17,9 @@ public class SitePoint extends AbstractPoint implements Comparable<SitePoint>,
 	public SitePoint(Point2D p) {
 		position = p;
 	}
-	
+
 	public SitePoint() {
-		
+
 	}
 
 	/**

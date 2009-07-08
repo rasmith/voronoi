@@ -1,6 +1,5 @@
 package rsmith;
 
-
 public abstract class AbstractPoint implements VoronoiPoint {
 	private VoronoiNode node = null;
 

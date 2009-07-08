@@ -4,12 +4,12 @@ import java.awt.geom.Point2D;
 
 public class VoronoiNode implements Comparable<VoronoiNode> {
 	private VoronoiPoint point = null;
-	private SweepEvent event = null;
+	private CircleEvent circleEvent = null;
 	private FortuneData fortuneData = null;
 
-	public VoronoiNode(VoronoiPoint point, SweepEvent event) {
+	public VoronoiNode(VoronoiPoint point, CircleEvent event) {
 		this.point = point;
-		this.event = event;
+		this.circleEvent = event;
 	}
 
 	public Point2D getPosition() {
@@ -22,12 +22,12 @@ public class VoronoiNode implements Comparable<VoronoiNode> {
 		return PointUtils.comparePointsX(p, q);
 	}
 
-	public void setEvent(SweepEvent event) {
-		this.event = event;
+	public void setCircleEvent(CircleEvent event) {
+		this.circleEvent = event;
 	}
 
-	public SweepEvent getEvent() {
-		return event;
+	public CircleEvent getCircleEvent() {
+		return circleEvent;
 	}
 
 	public VoronoiPoint getPoint() {
