@@ -8,6 +8,8 @@ public class Tests {
         testBisector();
         testQuadratic();
         testCircleEvent();
+        testSolveRoots();
+        testBreakPoint();
     }
     public static void testCircleEvent() {
         System.out.println("testCircleEvent:begin");
@@ -62,6 +64,28 @@ public class Tests {
         }
         System.out.println("testCircleEvent:end");
     }
+    public static void testSolveRoots() {
+    	double a = Math.exp( randomNumber(-10, 10 )) ;
+    	double b = Math.exp( randomNumber(-10,10));
+    	double c = Math.exp( randomNumber(-10,10));
+    	Quadratic q = new Quadratic(a,b,c);
+    	double [] roots = q.solve();
+    	if(roots != null) {
+    		double x1 = roots[0];
+    		double x2 = roots[1];
+    		double y1 = q.eval(x1);
+    		double y2 = q.eval(x2);
+    		if(Math.abs(y1) > eps) {
+    			System.out.println("Solve failed, x1="+x1+",y1="+y1+",q="+q);
+    			return;
+    		}
+    		if(Math.abs(y2) > eps) {
+    			System.out.println("Solve failed,x2="+x2+",y2="+y2+",q="+q);
+    			return;
+    		}
+    	}
+    	
+    }
     public static void testQuadratic() {
         System.out.println("testQuadratic:begin");
         for(int i=0;i<100;i++) {
@@ -108,6 +132,61 @@ public class Tests {
         }
         System.out.println("testBisector:end");
     }
+    public static void testBreakPoint() {
+    	System.out.println("testBreakPoint:begin");
+    	for(int i=0;i<100;i++) {    		
+    		Point2D p = randomPoint(500,1000);
+    		Point2D q = randomPoint(0,400);
+    		SitePoint sp = new SitePoint(p);
+    		SitePoint sq = new SitePoint(q);
+    		double sweepY = randomNumber(-500,-1000);
+    		BreakPoint b = new BreakPoint();
+    		BreakPoint c = new BreakPoint();
+    		Quadratic qp = sp.createQuadratic(sweepY);
+    		Quadratic qq = sq.createQuadratic(sweepY);
+    		
+    		b.setLeft(sp);
+    		b.setRight(sq);
+    		
+    		c.setLeft(sq);
+    		c.setRight(sp);
+    		
+    		Point2D bpos = b.calculatePosition(sweepY);
+    		Point2D cpos = c.calculatePosition(sweepY);
+    		boolean error = false;
+    		if(bpos.getX()  >= cpos.getX()) {
+    			System.out.println("bpos.x < cpos.x should hold, bpos="+bpos+",cpos="+cpos
+    					+"\n p="+p+",q="+q);
+    			error=true;
+    		} else {
+    			double x1 = randomNumber(bpos.getX() - 1000, bpos.getX() - eps);
+    			double x2 = randomNumber(bpos.getX() + eps, cpos.getX() - eps);
+    			double x3 = randomNumber(cpos.getX() + eps, cpos.getX() + 1000);
+    			double y1p = qp.eval(x1);
+    			double y1q = qq.eval(x1);
+    			double y2p = qp.eval(x2);
+    			double y2q = qq.eval(x2);
+    			double y3p = qp.eval(x3);
+    			double y3q = qq.eval(x3);
+    			if(y1p >= y1q) {
+    				System.out.println("y1p < y1q should hold: y1p="+y1p+",y1q="+y1q);
+    				error=true;
+    			}
+    			if(y2q >= y2p) {
+    				System.out.println("y2q < y2p should hold: y2q="+y2q+",y2p="+y2p);
+    				error=true;
+    			}
+    			if(y3p >= y3q) {
+    				System.out.println("y3p < y3q should hold:y3p="+y3p+",y3q="+y3q);
+    				error=true;
+    			}
+    		}	
+    		if(error) {
+				return;
+			}
+    	}
+    }
+    
     public static Point2D randomPoint(double min, double max) {
         return new Point2D.Double(randomNumber(min,max),randomNumber(min,max));
     }
