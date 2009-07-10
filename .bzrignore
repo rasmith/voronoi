@@ -1,0 +1,8 @@
+*.class
+*.preferences.*
+.classpath
+.project
+.settings*
+.project
+bin
+.settings.moved
