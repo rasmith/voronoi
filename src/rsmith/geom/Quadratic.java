@@ -167,8 +167,8 @@ public class Quadratic implements Comparable<Quadratic> {
 		// TODO Auto-generated method stub
 		return 0;
 	}
- 
+
 	public String toString() {
-		return "[a="+a+",b="+b+",c="+c+"]";
+		return "[a=" + a + ",b=" + b + ",c=" + c + "]";
 	}
 }

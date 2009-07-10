@@ -17,8 +17,8 @@ public class Line {
 		double px = p.getX(), py = p.getY(), qx = q.getX(), qy = q.getY();
 		double diffx = px - qx;
 		double diffy = py - qy;
-		double mx = (px+qx)/2;
-		double my = (py+qy)/2;
+		double mx = (px + qx) / 2;
+		double my = (py + qy) / 2;
 		double m = 0, b = 0;
 		if (diffx == 0 && diffy != 0) {
 			// one point is above another
@@ -30,10 +30,10 @@ public class Line {
 			// bisector is the vertical line halfway between them
 			m = Double.POSITIVE_INFINITY; // vertical lines have infinite slope
 			b = (px + qx) / 2;
-		} else if (diffx != 0 && diffy != 0 ) {
+		} else if (diffx != 0 && diffy != 0) {
 			// ensure that p != q
-		    // my = m*mx+b
-			m = - diffx / diffy;
+			// my = m*mx+b
+			m = -diffx / diffy;
 			b = my - m * mx;
 		}
 		result = new Line(m, b);
@@ -113,9 +113,9 @@ public class Line {
 	public void setB(double b) {
 		this.b = b;
 	}
-	
+
 	public String toString() {
-	    return "[m="+this.m+",b="+this.b+"]";
+		return "[m=" + this.m + ",b=" + this.b + "]";
 	}
 
 }

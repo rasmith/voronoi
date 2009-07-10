@@ -127,7 +127,7 @@ public class BreakPoint extends AbstractPoint implements
 		Point2D pos = calculatePosition(sweep);
 		setPosition(pos);
 	}
-	
+
 	public Point2D calculatePosition(double sweepY) {
 		Point2D result = null;
 		double sweep = sweepY;
@@ -141,7 +141,7 @@ public class BreakPoint extends AbstractPoint implements
 				// (x1,y1) and (x2,y2) are the intersection points
 				// intersect should return x1 and x2 such that x1 < x2
 				// need to determine which parabola is lowest when x < x1
-				double half = x1  - 20;
+				double half = x1 - 20;
 				double mid = (x1 + x2) / 2;
 				if (qLeft.eval(half) < qRight.eval(half)
 						&& qRight.eval(mid) < qLeft.eval(mid)) {
