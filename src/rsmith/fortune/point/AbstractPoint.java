@@ -1,4 +1,6 @@
-package rsmith;
+package rsmith.fortune.point;
+
+import rsmith.fortune.VoronoiNode;
 
 public abstract class AbstractPoint implements VoronoiPoint {
 	private VoronoiNode node = null;

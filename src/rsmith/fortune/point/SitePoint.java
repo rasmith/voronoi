@@ -1,6 +1,9 @@
-package rsmith;
+package rsmith.fortune.point;
 
 import java.awt.geom.Point2D;
+
+import rsmith.geom.Quadratic;
+import rsmith.util.PointUtils;
 
 /**
  * @author agrippa

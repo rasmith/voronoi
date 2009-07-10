@@ -1,4 +1,6 @@
-package rsmith;
+package rsmith.fortune.event;
+
+import rsmith.fortune.FortuneData;
 
 public abstract class AbstractSweepEvent implements SweepEvent {
 	private FortuneData fortuneData;

@@ -1,4 +1,4 @@
-package rsmith;
+package rsmith.geom;
 
 import java.awt.geom.Point2D;
 

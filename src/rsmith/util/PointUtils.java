@@ -1,6 +1,7 @@
-package rsmith;
+package rsmith.util;
 
 import java.awt.geom.Point2D;
+
 
 public class PointUtils {
 	public static int comparePointsX(Point2D p, Point2D q) {
@@ -20,4 +21,8 @@ public class PointUtils {
 				: (diff2 > 0 ? 1 : 0))));
 		return result;
 	}
+	
+	  public static Point2D randomPoint(double min, double max) {
+	        return new Point2D.Double(NumberUtils.randomNumber(min,max),NumberUtils.randomNumber(min,max));
+	    }
 }

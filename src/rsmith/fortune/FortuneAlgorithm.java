@@ -1,13 +1,20 @@
-package rsmith;
+package rsmith.fortune;
 
 import java.awt.geom.Point2D;
 import java.util.Iterator;
 import java.util.NavigableSet;
+import java.util.Set;
+
+import rsmith.fortune.event.CircleEvent;
+import rsmith.fortune.event.SiteEvent;
+import rsmith.fortune.event.SweepEvent;
+import rsmith.fortune.point.BreakPoint;
+import rsmith.fortune.point.SitePoint;
 
 public class FortuneAlgorithm {
 	private FortuneData fortuneData = null;
 
-	public FortuneAlgorithm(NavigableSet<Point2D> points) {
+	public FortuneAlgorithm(Set<Point2D> points) {
 		fortuneData = new FortuneData(points);
 	}
 

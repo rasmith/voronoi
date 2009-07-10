@@ -2,6 +2,14 @@ package rsmith;
 
 import java.awt.geom.Point2D;
 
+import rsmith.fortune.event.CircleEvent;
+import rsmith.fortune.point.BreakPoint;
+import rsmith.fortune.point.SitePoint;
+import rsmith.geom.Line;
+import rsmith.geom.Quadratic;
+import rsmith.util.NumberUtils;
+import rsmith.util.PointUtils;
+
 public class Tests {
     private static double eps = 0.00005;
     public static void main(String [] args) {
@@ -14,13 +22,13 @@ public class Tests {
     public static void testCircleEvent() {
         System.out.println("testCircleEvent:begin");
         for(int i=0;i<100;i++) {
-           Point2D pi = new Point2D.Double( randomNumber(0,10), randomNumber(0,1000));
-           Point2D pj = new Point2D.Double( randomNumber(11,20), randomNumber(0,1000));
-           Point2D pk = new Point2D.Double( randomNumber(21,30), randomNumber(0,1000));
+           Point2D pi = new Point2D.Double( NumberUtils.randomNumber(0,10), NumberUtils.randomNumber(0,1000));
+           Point2D pj = new Point2D.Double( NumberUtils.randomNumber(11,20), NumberUtils.randomNumber(0,1000));
+           Point2D pk = new Point2D.Double( NumberUtils.randomNumber(21,30), NumberUtils.randomNumber(0,1000));
            SitePoint si = new SitePoint(pi);
            SitePoint sj = new SitePoint(pj);
            SitePoint sk = new SitePoint(pk);
-           double sweepY = randomNumber(-1,-1000);
+           double sweepY = NumberUtils.randomNumber(-1,-1000);
            CircleEvent event = CircleEvent.createCircleEvent(sweepY, si,sj,sk);
            if(event != null) {
                Point2D c = event.getCenter();
@@ -65,9 +73,9 @@ public class Tests {
         System.out.println("testCircleEvent:end");
     }
     public static void testSolveRoots() {
-    	double a = Math.exp( randomNumber(-10, 10 )) ;
-    	double b = Math.exp( randomNumber(-10,10));
-    	double c = Math.exp( randomNumber(-10,10));
+    	double a = Math.exp( NumberUtils.randomNumber(-10, 10 )) ;
+    	double b = Math.exp( NumberUtils.randomNumber(-10,10));
+    	double c = Math.exp( NumberUtils.randomNumber(-10,10));
     	Quadratic q = new Quadratic(a,b,c);
     	double [] roots = q.solve();
     	if(roots != null) {
@@ -89,12 +97,12 @@ public class Tests {
     public static void testQuadratic() {
         System.out.println("testQuadratic:begin");
         for(int i=0;i<100;i++) {
-            Point2D p = randomPoint(0,100);
+            Point2D p = PointUtils.randomPoint(0,100);
             SitePoint s = new SitePoint(p);
-            double sweepY = randomNumber(-1,-1000);
+            double sweepY = NumberUtils.randomNumber(-1,-1000);
             Quadratic f = s.createQuadratic(sweepY);
             for(int j=0;j<100;j++) {
-                double x = randomNumber(-1000,1000);
+                double x = NumberUtils.randomNumber(-1000,1000);
                 double y = f.eval(x);
                 Point2D l = new Point2D.Double(x,sweepY);
                 Point2D q = new Point2D.Double(x,y);
@@ -113,11 +121,11 @@ public class Tests {
     public static void testBisector() {
         System.out.println("testBisector:begin");
         for(int i=0;i<100;i++) {
-            Point2D p = randomPoint(0,50);
-            Point2D q = randomPoint(0,50);
+            Point2D p = PointUtils.randomPoint(0,50);
+            Point2D q = PointUtils.randomPoint(0,50);
             Line line = Line.bisector(p, q);
             for(int j=0;j<100;j++) {
-                double x = randomNumber(-1000,1000);
+                double x = NumberUtils.randomNumber(-1000,1000);
                 double y = line.eval(x);
                 Point2D r = new Point2D.Double(x,y);
                 double d1 = r.distance(p);
@@ -135,11 +143,11 @@ public class Tests {
     public static void testBreakPoint() {
     	System.out.println("testBreakPoint:begin");
     	for(int i=0;i<100;i++) {    		
-    		Point2D p = randomPoint(500,1000);
-    		Point2D q = randomPoint(0,400);
+    		Point2D p = PointUtils.randomPoint(500,1000);
+    		Point2D q = PointUtils.randomPoint(0,400);
     		SitePoint sp = new SitePoint(p);
     		SitePoint sq = new SitePoint(q);
-    		double sweepY = randomNumber(-500,-1000);
+    		double sweepY = NumberUtils.randomNumber(-500,-1000);
     		BreakPoint b = new BreakPoint();
     		BreakPoint c = new BreakPoint();
     		Quadratic qp = sp.createQuadratic(sweepY);
@@ -159,9 +167,9 @@ public class Tests {
     					+"\n p="+p+",q="+q);
     			error=true;
     		} else {
-    			double x1 = randomNumber(bpos.getX() - 1000, bpos.getX() - eps);
-    			double x2 = randomNumber(bpos.getX() + eps, cpos.getX() - eps);
-    			double x3 = randomNumber(cpos.getX() + eps, cpos.getX() + 1000);
+    			double x1 = NumberUtils.randomNumber(bpos.getX() - 1000, bpos.getX() - eps);
+    			double x2 = NumberUtils.randomNumber(bpos.getX() + eps, cpos.getX() - eps);
+    			double x3 = NumberUtils.randomNumber(cpos.getX() + eps, cpos.getX() + 1000);
     			double y1p = qp.eval(x1);
     			double y1q = qq.eval(x1);
     			double y2p = qp.eval(x2);
@@ -185,12 +193,5 @@ public class Tests {
 				return;
 			}
     	}
-    }
-    
-    public static Point2D randomPoint(double min, double max) {
-        return new Point2D.Double(randomNumber(min,max),randomNumber(min,max));
-    }
-    public static double randomNumber(double min, double max) {
-        return Math.random()*(max-min)+min;
     }
 }

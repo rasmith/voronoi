@@ -1,6 +1,10 @@
-package rsmith;
+package rsmith.fortune.event;
 
 import java.awt.geom.Point2D;
+
+import rsmith.fortune.point.BreakPoint;
+import rsmith.fortune.point.SitePoint;
+import rsmith.geom.Line;
 
 public class CircleEvent extends AbstractSweepEvent implements SweepEvent {
 

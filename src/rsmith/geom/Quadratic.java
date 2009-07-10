@@ -1,4 +1,4 @@
-package rsmith;
+package rsmith.geom;
 
 /**
  * @author agrippa

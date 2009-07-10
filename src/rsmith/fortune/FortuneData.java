@@ -1,21 +1,28 @@
-package rsmith;
+package rsmith.fortune;
 
 import java.awt.geom.Point2D;
 import java.util.NavigableSet;
 import java.util.PriorityQueue;
+import java.util.Set;
+
+import rsmith.fortune.event.CircleEvent;
+import rsmith.fortune.event.SiteEvent;
+import rsmith.fortune.event.SweepEvent;
+import rsmith.fortune.point.BreakPoint;
+import rsmith.fortune.point.SitePoint;
 
 public class FortuneData {
 
 	private PriorityQueue<SweepEvent> eventQueue;
 	private NavigableSet<VoronoiNode> beachline;
 	private NavigableSet<SitePoint> sites;
-	private NavigableSet<Point2D> points;
+	private Set<Point2D> points;
 	private double sweepY;
 
 	/**
 	 * @param p
 	 */
-	public FortuneData(NavigableSet<Point2D> p) {
+	public FortuneData(Set<Point2D> p) {
 		points = p;
 	}
 
@@ -69,7 +76,7 @@ public class FortuneData {
 	/**
 	 * @return the points
 	 */
-	public NavigableSet<Point2D> getPoints() {
+	public Set<Point2D> getPoints() {
 		return points;
 	}
 

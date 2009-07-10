@@ -1,4 +1,6 @@
-package rsmith;
+package rsmith.fortune.event;
+
+import rsmith.fortune.point.SitePoint;
 
 public class SiteEvent extends AbstractSweepEvent implements SweepEvent {
 

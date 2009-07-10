@@ -1,6 +1,10 @@
-package rsmith;
+package rsmith.fortune;
 
 import java.awt.geom.Point2D;
+
+import rsmith.fortune.event.CircleEvent;
+import rsmith.fortune.point.VoronoiPoint;
+import rsmith.util.PointUtils;
 
 public class VoronoiNode implements Comparable<VoronoiNode> {
 	private VoronoiPoint point = null;

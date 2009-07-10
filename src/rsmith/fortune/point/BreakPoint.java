@@ -1,6 +1,9 @@
-package rsmith;
+package rsmith.fortune.point;
 
 import java.awt.geom.Point2D;
+
+import rsmith.geom.Quadratic;
+import rsmith.util.PointUtils;
 
 /**
  * @author agrippa
@@ -125,7 +128,7 @@ public class BreakPoint extends AbstractPoint implements
 		setPosition(pos);
 	}
 	
-	Point2D calculatePosition(double sweepY) {
+	public Point2D calculatePosition(double sweepY) {
 		Point2D result = null;
 		double sweep = sweepY;
 		Quadratic qLeft = left.createQuadratic(sweep);
