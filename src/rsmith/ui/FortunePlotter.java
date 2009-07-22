@@ -30,9 +30,23 @@ public class FortunePlotter extends Thread {
 	}
 
 	private void init() {
+		Point2D.Double [] testPoints  = {
+				new Point2D.Double(214.33016065965256,267.26155674871404),
+				new Point2D.Double(185.91982703582931,173.9413503911116),
+				new Point2D.Double(249.17348213997917,176.29054413956277),
+				new Point2D.Double(146.16226904173257,200.41007959663432),
+				new Point2D.Double(171.2625894302044,167.25732810645806),
+				new Point2D.Double(189.694992382948,276.5030262983955),
+				new Point2D.Double(278.42154200153936,219.55123585241193),
+				new Point2D.Double(280.1723056750386,125.31368823793328),
+				new Point2D.Double(141.66704014556166,130.00460088413675),
+				new Point2D.Double(160.20875408755992,201.71569526342256)};
+		
 		points = new HashSet<Point2D>();
 		for (int i = 0; i < 10; i++) {
-			points.add(PointUtils.randomPoint(250, 300));
+			Point2D p = testPoints[i];//PointUtils.randomPoint(100,300);
+			//System.out.print("new Point2D.Double("+p.getX()+","+p.getY()+"),");
+			points.add(p);
 		}
 		fortune = new FortuneAlgorithm(points);
 		fortune.init();
@@ -84,6 +98,7 @@ public class FortunePlotter extends Thread {
 	}
 
 	public void draw() {
+		/**
 		FortuneData data = fortune.getFortuneData();
 		Iterator<VoronoiNode> iter =data.getBeachline().iterator();
 		double sweepY = data.getSweepY();
@@ -102,9 +117,13 @@ public class FortunePlotter extends Thread {
 				if(bpp != null && bpp.getPosition().getX() > bp.getPosition().getX()) {
 					System.out.println("Found breakpoints out of order (bp,bpp)"+ bp.getPosition() + "," + bpp.getPosition());
 				}
+			} else {
+				if(data.getBeachline().size() > 1) {
+					System.out.println("Found a site point when should not have.");
+				}
 			}
 		}
-		System.out.println("]");
+		System.out.println("]");**/
 	}
 	
 	public void _draw() {

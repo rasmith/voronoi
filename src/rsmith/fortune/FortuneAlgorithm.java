@@ -43,7 +43,42 @@ public class FortuneAlgorithm {
 	public boolean isFinished() {
 		return getFortuneData().getEventQueue().isEmpty();
 	}
-
+	
+	private static int vernum=0;
+	public  void verifyBeachline() {
+		vernum++;
+		System.out.println("verifyBeachline:vernum="+vernum);
+		FortuneData data = getFortuneData();
+		Iterator<VoronoiNode> iter =data.getBeachline().iterator();
+		double sweepY = data.getSweepY();
+		VoronoiNode last = null;
+		VoronoiNode current = null;
+		System.out.print("[");
+		while(iter.hasNext()) {
+			current = iter.next();
+			if(current.getPoint() instanceof BreakPoint) {
+				BreakPoint bp = (BreakPoint)current.getPoint();
+				BreakPoint bpn = bp.getNext();
+				if(bpn != null && bpn.getPosition().getX() < bp.getPosition().getX()) {
+					System.out.println("Found breakpoints out of order (bp,bpn):"+bp.getPosition()+","+bpn.getPosition());
+				}
+				if(bpn != null && bp.getRight() != bpn.getLeft()) {
+					System.out.println("bp.getRight() == bpn.getLeft() should hold at all times");
+				}
+				BreakPoint bpp = bp.getPrevious();
+				if(bpp != null && bpp.getPosition().getX() > bp.getPosition().getX()) {
+					System.out.println("Found breakpoints out of order (bp,bpp)"+ bp.getPosition() + "," + bpp.getPosition());
+				}
+			} else {
+				if(data.getBeachline().size() > 1) {
+					System.out.println("Found a site point when should not have.");
+				}
+			}
+			
+		}
+		System.out.println("]");
+	}
+	
 	public void handleSiteEvent(SiteEvent se) {
 		System.out.println("handleSiteEvent:y="+fortuneData.getSweepY());
 		NavigableSet<VoronoiNode> beachline = fortuneData.getBeachline();
@@ -75,6 +110,12 @@ public class FortuneAlgorithm {
 			bl = (before != null ? (BreakPoint) before.getPoint() : null);
 			br = (after != null ? (BreakPoint) after.getPoint() : null);
 			assert (!(bl == null && br == null));
+			if(bl != null && br != null && bl.getRight() != br.getLeft()) {
+				System.out.println("bl.getRight() == br.getLeft()  should hold");
+			} else
+			if(bl != null && br != null && bl.getRight() == br.getLeft()) {
+				System.out.println("bl.getRight() == br.getLeft() holds.");
+			}
 			// if bl is null, then use br
 			if (bl == null && br != null) {
 				q = br.getLeft();
@@ -95,6 +136,9 @@ public class FortuneAlgorithm {
 
 		// we should have q at this point
 		assert (q != null);
+		if(q==null) {
+			System.out.println("q was null");
+		}
 
 		// create the two new breakpoints that will intersect this arc
 		BreakPoint b1 = new BreakPoint();
@@ -102,12 +146,15 @@ public class FortuneAlgorithm {
 
 		VoronoiNode vb1 = fortuneData.insertBreakPoint(b1, bl, b2, q, p);
 		VoronoiNode vb2 = fortuneData.insertBreakPoint(b2, b1, br, p, q);
-
+		 verifyBeachline();
+		 
 		fixCircleEvent(bl, br);
 
 		if (beachline.size() > 2) {
 			fortuneData.insertCircleEvents(vb1, vb2);
 		}
+		 verifyBeachline();
+		 
 	}
 
 	private void fixCircleEvent(BreakPoint left, BreakPoint right) {
