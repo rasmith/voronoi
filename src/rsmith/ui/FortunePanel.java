@@ -6,7 +6,6 @@ import java.awt.Graphics;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
-import java.awt.event.*;
 
 class FortunePanel extends JPanel {
 

@@ -1,7 +1,6 @@
 package rsmith.fortune;
 
 import java.awt.geom.Point2D;
-import java.util.HashSet;
 import java.util.NavigableSet;
 import java.util.PriorityQueue;
 import java.util.Set;
