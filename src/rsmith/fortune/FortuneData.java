@@ -1,9 +1,11 @@
 package rsmith.fortune;
 
 import java.awt.geom.Point2D;
+import java.util.HashSet;
 import java.util.NavigableSet;
 import java.util.PriorityQueue;
 import java.util.Set;
+import java.util.TreeSet;
 
 import rsmith.fortune.event.CircleEvent;
 import rsmith.fortune.event.SiteEvent;
@@ -24,6 +26,12 @@ public class FortuneData {
 	 */
 	public FortuneData(Set<Point2D> p) {
 		points = p;
+	}
+
+	public void init() {
+		eventQueue = new PriorityQueue<SweepEvent>(new TreeSet<SweepEvent>());
+		beachline = new TreeSet<VoronoiNode>();
+		sites = new TreeSet<SitePoint>();
 	}
 
 	/**
@@ -130,8 +138,7 @@ public class FortuneData {
 		b.setNext(next);
 		b.setLeft(left);
 		b.setRight(right);
-		VoronoiNode node = new VoronoiNode(b, null);
-		node.setFortuneData(this);
+		VoronoiNode node = new VoronoiNode(b, null, this);
 		b.setNode(node);
 		beachline.add(node);
 		return node;

@@ -5,6 +5,7 @@ import rsmith.fortune.point.SitePoint;
 public class SiteEvent extends AbstractSweepEvent implements SweepEvent {
 
 	private SitePoint site;
+	private static String eventType = "site";
 
 	public SiteEvent(SitePoint s) {
 		site = s;
@@ -20,6 +21,10 @@ public class SiteEvent extends AbstractSweepEvent implements SweepEvent {
 
 	public void setSite(SitePoint site) {
 		this.site = site;
+	}
+
+	public String getEventType() {
+		return eventType;
 	}
 
 }

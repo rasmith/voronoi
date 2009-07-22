@@ -6,6 +6,7 @@ import java.awt.Graphics;
 
 import javax.swing.BorderFactory;
 import javax.swing.JPanel;
+import java.awt.event.*;
 
 class FortunePanel extends JPanel {
 
@@ -14,10 +15,11 @@ class FortunePanel extends JPanel {
 	 */
 	private static final long serialVersionUID = 1664625747676781533L;
 	private FortunePlotter plotter = null;
-	
+
 	public FortunePanel() {
 		setBorder(BorderFactory.createLineBorder(Color.black));
 		plotter = new FortunePlotter(this);
+		plotter.start();
 	}
 
 	public Dimension getPreferredSize() {

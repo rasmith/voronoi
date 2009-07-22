@@ -8,8 +8,7 @@ import java.util.Set;
 import rsmith.fortune.event.CircleEvent;
 import rsmith.fortune.event.SiteEvent;
 import rsmith.fortune.event.SweepEvent;
-import rsmith.fortune.point.BreakPoint;
-import rsmith.fortune.point.SitePoint;
+import rsmith.fortune.point.*;
 
 public class FortuneAlgorithm {
 	private FortuneData fortuneData = null;
@@ -19,6 +18,7 @@ public class FortuneAlgorithm {
 	}
 
 	public void init() {
+		fortuneData.init();
 		Iterator<Point2D> iter = getFortuneData().getPoints().iterator();
 		while (iter.hasNext()) {
 			Point2D p = (Point2D) iter.next();
@@ -28,6 +28,7 @@ public class FortuneAlgorithm {
 
 	public void step() {
 		if (!isFinished()) {
+			// System.out.println("eventq="+getFortuneData().getEventQueue());
 			SweepEvent e = (SweepEvent) getFortuneData().getEventQueue()
 					.remove();
 			getFortuneData().setSweepY(e.getEventY());
@@ -44,16 +45,18 @@ public class FortuneAlgorithm {
 	}
 
 	public void handleSiteEvent(SiteEvent se) {
+		System.out.println("handleSiteEvent:y="+fortuneData.getSweepY());
 		NavigableSet<VoronoiNode> beachline = fortuneData.getBeachline();
 
 		if (beachline.isEmpty()) {
-			beachline.add(new VoronoiNode(se.getSite(), null));
+			beachline.add(new VoronoiNode(se.getSite(), null, this
+					.getFortuneData()));
 			return;
 		}
 		SitePoint p = se.getSite();
 		BreakPoint bl = null;
 		BreakPoint br = null;
-		VoronoiNode vp = new VoronoiNode(p, null);
+		VoronoiNode vp = new VoronoiNode(p, null, this.getFortuneData());
 		SitePoint q = null;
 		// find arc above the site p
 		if (getFortuneData().getBeachline().size() == 1) {
@@ -69,8 +72,8 @@ public class FortuneAlgorithm {
 			VoronoiNode before = beachline.floor(vp); // this gets the nodes
 			VoronoiNode after = beachline.ceiling(vp);
 			// get the corresponding breakpoints
-			bl = (BreakPoint) before.getPoint();
-			br = (BreakPoint) after.getPoint();
+			bl = (before != null ? (BreakPoint) before.getPoint() : null);
+			br = (after != null ? (BreakPoint) after.getPoint() : null);
 			assert (!(bl == null && br == null));
 			// if bl is null, then use br
 			if (bl == null && br != null) {
@@ -117,6 +120,7 @@ public class FortuneAlgorithm {
 	}
 
 	public void handleCircleEvent(CircleEvent ce) {
+		System.out.println("handleCircleEvent:y="+fortuneData.getSweepY());
 		// the breakpoints representing the disappearing arc
 		BreakPoint leftBP = ce.getLeftBP();
 		BreakPoint rightBP = ce.getRightBP();

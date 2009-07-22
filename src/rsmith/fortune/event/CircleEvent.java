@@ -17,6 +17,7 @@ public class CircleEvent extends AbstractSweepEvent implements SweepEvent {
 	private SitePoint pi;
 	private SitePoint pj;
 	private SitePoint pk;
+	private static String eventType = "circle";
 
 	public CircleEvent(Point2D center, double radius, SitePoint pi,
 			SitePoint pj, SitePoint pk) {
@@ -175,5 +176,10 @@ public class CircleEvent extends AbstractSweepEvent implements SweepEvent {
 	 */
 	public void setRadius(double radius) {
 		this.radius = radius;
+	}
+
+	@Override
+	public String getEventType() {
+		return eventType;
 	}
 }

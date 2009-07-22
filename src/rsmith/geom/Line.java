@@ -28,7 +28,8 @@ public class Line {
 		} else if (diffx != 0 && diffy == 0) {
 			// one bisector is beside the other
 			// bisector is the vertical line halfway between them
-			m = Double.POSITIVE_INFINITY; // vertical lines have infinite slope
+			m = Double.POSITIVE_INFINITY; // vertical lines have infinite
+											// slope
 			b = (px + qx) / 2;
 		} else if (diffx != 0 && diffy != 0) {
 			// ensure that p != q

@@ -116,7 +116,54 @@ public class BreakPoint extends AbstractPoint implements
 
 	@Override
 	public int compareTo(BreakPoint bp) {
-		return PointUtils.comparePointsX(this.getPosition(), bp.getPosition());
+		int result = 0;
+		boolean hasSiteAtSweep1 = hasSiteAtSweep();
+		boolean hasSiteAtSweep2 = bp.hasSiteAtSweep();
+		// System.out.println("compareTo:hasSiteAtSweep1=" + hasSiteAtSweep1
+		// + ",hasSiteAtSweep2=" + hasSiteAtSweep2);
+		if (!hasSiteAtSweep() && !bp.hasSiteAtSweep()) {
+			// System.out.println("Here 1");
+			result = PointUtils.comparePointsX(this.getPosition(), bp
+					.getPosition());
+		} else if (!hasSiteAtSweep() && bp.hasSiteAtSweep()) {
+			// System.out.println("Here 2");
+			double xpos = this.getPosition().getX();
+			SitePoint site = (bp.getLeft().getPosition().getY() == this
+					.getNode().getFortuneData().getSweepY() ? bp.getLeft() : bp
+					.getRight());
+			result = (xpos < site.getPosition().getX() ? -1 : (xpos > site
+					.getPosition().getX() ? 1 : 0));
+		} else if (hasSiteAtSweep() && bp.hasSiteAtSweep()) {
+			// System.out.println("Here 3");
+			result = (getRight() == bp.getLeft() ? -1 : (getLeft() == bp
+					.getRight() ? 1 : 0));
+		} else if (hasSiteAtSweep() && !bp.hasSiteAtSweep()) {
+			// System.out.println("Here 4");
+			double xpos = bp.getPosition().getX();
+			SitePoint site = (this.getLeft().getPosition().getY() == this
+					.getNode().getFortuneData().getSweepY() ? this.getLeft()
+					: this.getRight());
+			result = (xpos < site.getPosition().getX() ? 1 : (xpos > site
+					.getPosition().getX() ? -1 : 0));
+		}
+		return result;
+	}
+
+	private SitePoint getSiteAtSweep() {
+		double sweepY = this.getNode().getFortuneData().getSweepY();
+		SitePoint result = null;
+		if (this.getLeft().getPosition().getY() == sweepY) {
+			result = this.getLeft();
+		}
+		if (this.getRight().getPosition().getY() == sweepY) {
+			result = this.getRight();
+		}
+		return result;
+	}
+
+	private Boolean hasSiteAtSweep() {
+		SitePoint site = getSiteAtSweep();
+		return (site != null);
 	}
 
 	/**
@@ -129,29 +176,42 @@ public class BreakPoint extends AbstractPoint implements
 	}
 
 	public Point2D calculatePosition(double sweepY) {
+		// System.out.println("calculatePosition:sweepY=" + sweepY);
 		Point2D result = null;
 		double sweep = sweepY;
-		Quadratic qLeft = left.createQuadratic(sweep);
-		Quadratic qRight = right.createQuadratic(sweep);
-		double[] roots = qLeft.intersect(qRight);
-		if (roots != null) {
-			double x1 = roots[0];
-			double x2 = roots[1];
-			if (x1 != x2) {
-				// (x1,y1) and (x2,y2) are the intersection points
-				// intersect should return x1 and x2 such that x1 < x2
-				// need to determine which parabola is lowest when x < x1
-				double half = x1 - 20;
-				double mid = (x1 + x2) / 2;
-				if (qLeft.eval(half) < qRight.eval(half)
-						&& qRight.eval(mid) < qLeft.eval(mid)) {
-					double y1 = qLeft.eval(x1);
-					result = new Point2D.Double(x1, y1);
-				} else {
-					double y2 = qLeft.eval(x2);
-					result = new Point2D.Double(x2, y2);
+		SitePoint p = getSiteAtSweep();
+		if (p == null) {
+			Quadratic qLeft = left.createQuadratic(sweep);
+			Quadratic qRight = right.createQuadratic(sweep);
+			double[] roots = qLeft.intersect(qRight);
+			if (roots != null) {
+				double x1 = roots[0];
+				double x2 = roots[1];
+				if (x1 != x2) {
+					// (x1,y1) and (x2,y2) are the intersection points
+					// intersect should return x1 and x2 such that x1 < x2
+					// need to determine which parabola is lowest when x < x1
+					double half = x1 - 20;
+					double mid = (x1 + x2) / 2;
+					if (qLeft.eval(half) < qRight.eval(half)
+							&& qRight.eval(mid) < qLeft.eval(mid)) {
+						double y1 = qLeft.eval(x1);
+						result = new Point2D.Double(x1, y1);
+					} else {
+						double y2 = qLeft.eval(x2);
+						result = new Point2D.Double(x2, y2);
+					}
 				}
 			}
+			// System.out.println("calculatePosition:result=" + result +
+			// ",roots="
+			// + roots + ",qLeft=" + qLeft + ",qRight=" + qRight);
+		} else {
+			SitePoint q = (p == getLeft() ? getRight() : getLeft());
+			// System.out.println("p="+p);
+			double xval = p.getPosition().getX();
+			double yval = q.createQuadratic(sweepY).eval(xval);
+			result = new Point2D.Double(xval, yval);
 		}
 		return result;
 	}

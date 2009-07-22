@@ -49,6 +49,18 @@ public class Quadratic implements Comparable<Quadratic> {
 	}
 
 	/**
+	 * 
+	 * @param l
+	 * @return the points where the line l intersect with this quadratic
+	 */
+	public double[] intersectLine(Line l) {
+		double A = this.a;
+		double B = this.b - l.getM();
+		double C = this.c - l.getB();
+		return solveQuadratic(A, B, C);
+	}
+
+	/**
 	 * @param a
 	 * @param b
 	 * @param c

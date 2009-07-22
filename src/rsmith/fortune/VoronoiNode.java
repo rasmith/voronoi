@@ -3,6 +3,8 @@ package rsmith.fortune;
 import java.awt.geom.Point2D;
 
 import rsmith.fortune.event.CircleEvent;
+import rsmith.fortune.point.BreakPoint;
+import rsmith.fortune.point.SitePoint;
 import rsmith.fortune.point.VoronoiPoint;
 import rsmith.util.PointUtils;
 
@@ -11,9 +13,10 @@ public class VoronoiNode implements Comparable<VoronoiNode> {
 	private CircleEvent circleEvent = null;
 	private FortuneData fortuneData = null;
 
-	public VoronoiNode(VoronoiPoint point, CircleEvent event) {
+	public VoronoiNode(VoronoiPoint point, CircleEvent event, FortuneData data) {
 		this.point = point;
 		this.circleEvent = event;
+		this.fortuneData = data;
 	}
 
 	public Point2D getPosition() {
@@ -23,7 +26,38 @@ public class VoronoiNode implements Comparable<VoronoiNode> {
 	public int compareTo(VoronoiNode vn) {
 		Point2D p = this.getPosition();
 		Point2D q = vn.getPosition();
-		return PointUtils.comparePointsX(p, q);
+		int result = 0;
+		// System.out.println( "VoronoiNode::compareTo:p="+p+",q="+q);
+		if (this.point instanceof BreakPoint
+				&& vn.getPoint() instanceof BreakPoint) {
+			// System.out.println("VoronoiNode:compare two breakpoints");
+			BreakPoint bp = (BreakPoint) getPoint();
+			BreakPoint bq = (BreakPoint) vn.getPoint();
+			result = bp.compareTo(bq);
+		} else if (this.point instanceof SitePoint
+				&& vn.getPoint() instanceof SitePoint) {
+			// System.out.println("VoronoiNode:compare to site points");
+			result = PointUtils.comparePointsX(p, q);
+		} else {
+			// System.out.println("VoronoiNode:compare one site point and one
+			// breakpoint");
+			boolean which = getPoint() instanceof BreakPoint;
+			BreakPoint b = (which ? (BreakPoint) getPoint() : (BreakPoint) vn
+					.getPoint());
+			SitePoint s = (which ? (SitePoint) vn.getPoint()
+					: (SitePoint) getPoint());
+			double sweepY = this.getFortuneData().getSweepY();
+			if (b.getLeft().getPosition().getY() == sweepY
+					|| b.getRight().getPosition().getY() == sweepY) {
+				p = (b.getLeft().getPosition().getY() == sweepY ? b.getLeft()
+						.getPosition() : b.getRight().getPosition());
+				q = s.getPosition();
+				result = PointUtils.comparePointsX(p, q);
+			} else {
+				result = PointUtils.comparePointsX(p, q);
+			}
+		}
+		return result;
 	}
 
 	public void setCircleEvent(CircleEvent event) {
