@@ -127,7 +127,7 @@ public class BreakPoint extends AbstractPoint implements
 		return result;
 	}
 
-	private SitePoint getSiteAtSweep() {
+	public SitePoint getSiteAtSweep() {
 		double sweepY = this.getNode().getFortuneData().getSweepY();
 		SitePoint result = null;
 		if (this.getLeft().getPosition().getY() == sweepY) {
@@ -139,7 +139,7 @@ public class BreakPoint extends AbstractPoint implements
 		return result;
 	}
 
-	private Boolean hasSiteAtSweep() {
+	public Boolean hasSiteAtSweep() {
 		SitePoint site = getSiteAtSweep();
 		return (site != null);
 	}

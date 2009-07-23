@@ -128,53 +128,36 @@ public class FortunePlotter extends Thread {
 	public void draw() {
 		Iterator<VoronoiNode> iter = fortune.getFortuneData().getBeachline()
 				.iterator();
-		double sweepY = fortune.getFortuneData().getSweepY();
-		double fromX = 0;
-		double toX = 0;
-		Quadratic q = null;
-		clearGraphics();
-		drawHorizontalLine(sweepY);
-		Line l = new Line(0, 800);
-		double[] xvals = null;
+		panel.getGraphics().clearRect(0, 0, panel.getWidth(), panel.getHeight());
 		while (iter.hasNext()) {
 			VoronoiNode node = iter.next();
 			VoronoiPoint vp = node.getPoint();
 			if (vp instanceof BreakPoint) {
-				BreakPoint b = (BreakPoint) (vp);
-				SitePoint left = b.getLeft();
-				SitePoint right = b.getRight();
-				BreakPoint next = b.getNext();
-				BreakPoint previous = b.getPrevious();
-				Point2D pos = b.getPosition();
-				drawPoint2D(pos);
-				q = b.getRight().createQuadratic(sweepY);
-				fromX = ( previous == null ? 0 : pos.getX());
-				toX   = ( previous == null ? pos.getX() :
-											(next == null ? panel.getWidth() :
-															next.getPosition().getX()));
+				drawBreakPoint((BreakPoint)vp);
 			} else {
-				SitePoint s = (SitePoint) (vp);
-				q = s.createQuadratic(sweepY);
-				if(xvals != null) {
-					xvals = q.intersectLine(l);
-					fromX = Math.max(0, xvals[0]);
-					toX = Math.min(panel.getWidth(), xvals[1]);
-				}
+				drawSitePoint((SitePoint)vp);
 			}
-			if (q != null) {
-				if (q.getA() == Double.POSITIVE_INFINITY
-						|| q.getB() == Double.NEGATIVE_INFINITY) {
-					Point2D pos = vp.getPosition();
-					drawVerticalLine(pos.getX(), pos.getY(), sweepY);
-				} else {
-					xvals = q.intersectLine(l);
-					drawQuadratic(q,fromX,toX);
-
-				}
-			} 
+		}
+	}
+	
+	public void drawBreakPoint(BreakPoint b) {
+		if(b.hasSiteAtSweep()) {
+		} else {
+			if(b.getPrevious() == null) {;
+			} else if(b.getNext() == null) {
+			} else {
+				drawPoint2D(b.getPosition());
+				drawPoint2D(b.getNext().getPosition());
+				drawQuadratic(	b.getRight().createQuadratic(this.getFortune().getFortuneData().getSweepY()),
+								b.getPosition().getX(),
+								b.getNext().getPosition().getX());
+			}
 		}
 	}
 
+	public void drawSitePoint(SitePoint s) {
+	}
+	
 	public void run() {
 		try {
 			while (!fortune.isFinished()) {

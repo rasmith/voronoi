@@ -40,6 +40,7 @@ public class SitePoint extends AbstractPoint implements Comparable<SitePoint>,
 		Quadratic q = new Quadratic(A, B, C);
 		return q;
 	}
+	
 
 	/**
 	 * @return (x,y) coordinate of this site
