@@ -141,13 +141,13 @@ public class FortuneData {
 		b.setRight(right);
 		VoronoiNode node = new VoronoiNode(b, null, this);
 		b.setNode(node);
-		beachline.add(node);
 		if(previous != null) {
 			previous.setNext(b);
 		}
 		if(next != null) {
 			next.setPrevious(b);
 		}
+		beachline.add(node);
 		return node;
 	}
 
@@ -155,6 +155,14 @@ public class FortuneData {
 	 * @param b
 	 */
 	public void removeBreakPoint(BreakPoint b) {
+		BreakPoint previous = b.getPrevious();
+		BreakPoint next = b.getNext();
+		if(previous != null ) {
+			previous.setNext(next);
+		}
+		if(next != null) {
+			next.setPrevious(previous);
+		}
 		beachline.remove(b.getNode());
 	}
 
@@ -167,7 +175,7 @@ public class FortuneData {
 		BreakPoint b1 = (BreakPoint) vb1.getPoint();
 		BreakPoint b2 = (BreakPoint) vb2.getPoint();
 		BreakPoint bl = b1.getPrevious();
-		BreakPoint br = b1.getNext();
+		BreakPoint br = b2.getNext();
 		if (bl != null) {
 			insertCircleEvent(bl, b1);
 		}

@@ -27,6 +27,7 @@ public class BreakPoint extends AbstractPoint implements
 	 */
 	public BreakPoint(BreakPoint previous, BreakPoint next, SitePoint left,
 			SitePoint right) {
+		super();
 		this.setPrevious(previous);
 		this.setNext(next);
 		this.left = left;
@@ -34,6 +35,7 @@ public class BreakPoint extends AbstractPoint implements
 	}
 
 	public BreakPoint() {
+		super();
 	}
 
 	/**
@@ -117,34 +119,10 @@ public class BreakPoint extends AbstractPoint implements
 	@Override
 	public int compareTo(BreakPoint bp) {
 		int result = 0;
-		boolean hasSiteAtSweep1 = hasSiteAtSweep();
-		boolean hasSiteAtSweep2 = bp.hasSiteAtSweep();
-		// System.out.println("compareTo:hasSiteAtSweep1=" + hasSiteAtSweep1
-		// + ",hasSiteAtSweep2=" + hasSiteAtSweep2);
-		if (!hasSiteAtSweep() && !bp.hasSiteAtSweep()) {
-			// System.out.println("Here 1");
-			result = PointUtils.comparePointsX(this.getPosition(), bp
-					.getPosition());
-		} else if (!hasSiteAtSweep() && bp.hasSiteAtSweep()) {
-			// System.out.println("Here 2");
-			double xpos = this.getPosition().getX();
-			SitePoint site = (bp.getLeft().getPosition().getY() == this
-					.getNode().getFortuneData().getSweepY() ? bp.getLeft() : bp
-					.getRight());
-			result = (xpos < site.getPosition().getX() ? -1 : (xpos > site
-					.getPosition().getX() ? 1 : 0));
-		} else if (hasSiteAtSweep() && bp.hasSiteAtSweep()) {
-			// System.out.println("Here 3");
-			result = (getRight() == bp.getLeft() ? -1 : (getLeft() == bp
-					.getRight() ? 1 : 0));
-		} else if (hasSiteAtSweep() && !bp.hasSiteAtSweep()) {
-			// System.out.println("Here 4");
-			double xpos = bp.getPosition().getX();
-			SitePoint site = (this.getLeft().getPosition().getY() == this
-					.getNode().getFortuneData().getSweepY() ? this.getLeft()
-					: this.getRight());
-			result = (xpos < site.getPosition().getX() ? 1 : (xpos > site
-					.getPosition().getX() ? -1 : 0));
+		if(bp.hasSiteAtSweep() && this.hasSiteAtSweep()) {
+			result = (this == bp? 0 : (this.getNext() == bp ? -1 : 1));
+		} else {
+			result = PointUtils.comparePointsX(this.getPosition(), bp.getPosition());
 		}
 		return result;
 	}
@@ -154,7 +132,7 @@ public class BreakPoint extends AbstractPoint implements
 		SitePoint result = null;
 		if (this.getLeft().getPosition().getY() == sweepY) {
 			result = this.getLeft();
-		}
+		} else
 		if (this.getRight().getPosition().getY() == sweepY) {
 			result = this.getRight();
 		}
@@ -240,6 +218,10 @@ public class BreakPoint extends AbstractPoint implements
 		} else if (!position.equals(other.position))
 			return false;
 		return true;
+	}
+	
+	public String getType() {
+		return "breakpoint";
 	}
 
 }

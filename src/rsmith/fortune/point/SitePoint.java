@@ -18,11 +18,12 @@ public class SitePoint extends AbstractPoint implements Comparable<SitePoint>,
 	 * @param p
 	 */
 	public SitePoint(Point2D p) {
+		super();
 		position = p;
 	}
 
 	public SitePoint() {
-
+		super();
 	}
 
 	/**
@@ -93,5 +94,10 @@ public class SitePoint extends AbstractPoint implements Comparable<SitePoint>,
 	@Override
 	public int compareTo(SitePoint o) {
 		return PointUtils.comparePointsX(this.getPosition(), o.getPosition());
+	}
+	
+	
+	public String getType() {
+		return "site";
 	}
 }

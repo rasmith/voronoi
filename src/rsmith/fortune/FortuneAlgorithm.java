@@ -29,6 +29,7 @@ public class FortuneAlgorithm {
 	public void step() {
 		if (!isFinished()) {
 			// System.out.println("eventq="+getFortuneData().getEventQueue());
+			 System.out.println("beachline="+getFortuneData().getBeachline());
 			SweepEvent e = (SweepEvent) getFortuneData().getEventQueue()
 					.remove();
 			getFortuneData().setSweepY(e.getEventY());
@@ -171,6 +172,7 @@ public class FortuneAlgorithm {
 		// the breakpoints representing the disappearing arc
 		BreakPoint leftBP = ce.getLeftBP();
 		BreakPoint rightBP = ce.getRightBP();
+		System.out.println("handleCircleEvent:leftBP.id="+leftBP.getID()+",rightBP.id="+rightBP.getID());
 
 		// the breakpoints that lie to the left and right of this arc
 		BreakPoint previous = leftBP.getPrevious();

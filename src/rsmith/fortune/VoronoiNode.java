@@ -24,38 +24,15 @@ public class VoronoiNode implements Comparable<VoronoiNode> {
 	}
 
 	public int compareTo(VoronoiNode vn) {
-		Point2D p = this.getPosition();
-		Point2D q = vn.getPosition();
 		int result = 0;
-		// System.out.println( "VoronoiNode::compareTo:p="+p+",q="+q);
-		if (this.point instanceof BreakPoint
-				&& vn.getPoint() instanceof BreakPoint) {
-			// System.out.println("VoronoiNode:compare two breakpoints");
-			BreakPoint bp = (BreakPoint) getPoint();
-			BreakPoint bq = (BreakPoint) vn.getPoint();
-			result = bp.compareTo(bq);
-		} else if (this.point instanceof SitePoint
-				&& vn.getPoint() instanceof SitePoint) {
-			// System.out.println("VoronoiNode:compare to site points");
-			result = PointUtils.comparePointsX(p, q);
+		VoronoiPoint vp = this.getPoint();
+		VoronoiPoint vq = vn.getPoint();
+		if(vp instanceof BreakPoint &&  vq instanceof BreakPoint) {
+			result = ((BreakPoint)(vp)).compareTo((BreakPoint)vq);
 		} else {
-			// System.out.println("VoronoiNode:compare one site point and one
-			// breakpoint");
-			boolean which = getPoint() instanceof BreakPoint;
-			BreakPoint b = (which ? (BreakPoint) getPoint() : (BreakPoint) vn
-					.getPoint());
-			SitePoint s = (which ? (SitePoint) vn.getPoint()
-					: (SitePoint) getPoint());
-			double sweepY = this.getFortuneData().getSweepY();
-			if (b.getLeft().getPosition().getY() == sweepY
-					|| b.getRight().getPosition().getY() == sweepY) {
-				p = (b.getLeft().getPosition().getY() == sweepY ? b.getLeft()
-						.getPosition() : b.getRight().getPosition());
-				q = s.getPosition();
-				result = PointUtils.comparePointsX(p, q);
-			} else {
-				result = PointUtils.comparePointsX(p, q);
-			}
+			Point2D p = vp.getPosition();
+			Point2D q = vq.getPosition();
+			result = PointUtils.comparePointsX(p, q);
 		}
 		return result;
 	}
@@ -89,6 +66,10 @@ public class VoronoiNode implements Comparable<VoronoiNode> {
 	 */
 	public void setFortuneData(FortuneData voronoi) {
 		this.fortuneData = voronoi;
+	}
+	
+	public String toString() {
+		return getPoint().toString();
 	}
 
 }
