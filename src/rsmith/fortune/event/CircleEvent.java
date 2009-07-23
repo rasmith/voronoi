@@ -34,13 +34,37 @@ public class CircleEvent extends AbstractSweepEvent implements SweepEvent {
 		return eventY;
 	}
 
+	public static Point2D [] sortPointsX(Point2D p1, Point2D p2, Point2D p3) {
+		Point2D [] result = new Point2D.Double[3];
+		double p1x = p1.getX();
+		double p2x = p2.getX();
+		double p3x = p3.getX();
+		result[0] = (p1x<=p2x && p1x<=p3x ? p1 : (p2x<=p1x && p2x<=p3x ? p2 : p3));
+		result[2] = (p3x>=p1x && p3x>=p2x ? p3 : (p1x>=p2x && p1x>=p3x ? p1 : p2));
+		if(result [0] == p1) {
+			result[1] = ( result[2] == p3 ? p2 : p3);
+		} else
+		if(result[0] == p2) {
+			result[1] = ( result[2] == p3 ? p1 : p3);
+		} else
+		if(result[0] == p3) {
+			result[1] = ( result[2] == p1 ? p3 : p1);
+		}
+		
+		return result;
+		
+	}
+	
 	public static Point2D computeCircle(Point2D pi, Point2D pj, Point2D pk) {
 		Point2D result = null;
-		if (pi.getX() <= pj.getX() && pj.getX() <= pk.getX()) {
-			Line l1 = Line.bisector(pi, pj);
-			Line l2 = Line.bisector(pj, pk);
+		Point2D [] sorted = sortPointsX(pi,pj,pk);
+		//if (pi.getX() <= pj.getX() && pj.getX() <= pk.getX()) {
+			//Line l1 = Line.bisector(pi, pj);
+			//Line l2 = Line.bisector(pj, pk);
+			Line l1 = Line.bisector(sorted[0], sorted[1]);
+			Line l2 = Line.bisector(sorted[1], sorted[2]);
 			result = l1.intersect(l2);
-		}
+		//}
 		return result;
 	}
 

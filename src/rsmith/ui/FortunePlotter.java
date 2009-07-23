@@ -9,14 +9,13 @@ import java.util.Iterator;
 import javax.swing.JPanel;
 
 import rsmith.fortune.FortuneAlgorithm;
-import rsmith.fortune.FortuneData;
 import rsmith.fortune.VoronoiNode;
 import rsmith.fortune.point.BreakPoint;
 import rsmith.fortune.point.SitePoint;
 import rsmith.fortune.point.VoronoiPoint;
 import rsmith.geom.Line;
 import rsmith.geom.Quadratic;
-import rsmith.util.PointUtils;
+
 
 public class FortunePlotter extends Thread {
 
@@ -97,7 +96,7 @@ public class FortunePlotter extends Thread {
 		g.clearRect(0, 0, panel.getWidth(), panel.getHeight());
 	}
 
-	public void draw() {
+	public void _draw() {
 		/**
 		FortuneData data = fortune.getFortuneData();
 		Iterator<VoronoiNode> iter =data.getBeachline().iterator();
@@ -126,7 +125,7 @@ public class FortunePlotter extends Thread {
 		System.out.println("]");**/
 	}
 	
-	public void _draw() {
+	public void draw() {
 		Iterator<VoronoiNode> iter = fortune.getFortuneData().getBeachline()
 				.iterator();
 		double sweepY = fortune.getFortuneData().getSweepY();
@@ -148,26 +147,11 @@ public class FortunePlotter extends Thread {
 				BreakPoint previous = b.getPrevious();
 				Point2D pos = b.getPosition();
 				drawPoint2D(pos);
-				if (left != null && right != null) {
-					Line bis = Line.bisector(left.getPosition(), right
-							.getPosition());
-					drawLine(bis);
-				}
-				if (previous == null) {
-					q = left.createQuadratic(sweepY);
-					xvals = q.intersectLine(l);
-					fromX = Math.max(0, xvals[0]);
-					toX = pos.getX();
-				} else {
-					q = right.createQuadratic(sweepY);
-					fromX = pos.getX();
-					if (next == null) {
-						xvals = q.intersectLine(l);
-						toX= Math.min(panel.getWidth(), xvals[1]);
-					} else {
-						toX = next.getPosition().getX();
-					}
-				}
+				q = b.getRight().createQuadratic(sweepY);
+				fromX = ( previous == null ? 0 : pos.getX());
+				toX   = ( previous == null ? pos.getX() :
+											(next == null ? panel.getWidth() :
+															next.getPosition().getX()));
 			} else {
 				SitePoint s = (SitePoint) (vp);
 				q = s.createQuadratic(sweepY);
@@ -178,7 +162,6 @@ public class FortunePlotter extends Thread {
 				}
 			}
 			if (q != null) {
-				// drawQuadratic(q, 0 , 600);
 				if (q.getA() == Double.POSITIVE_INFINITY
 						|| q.getB() == Double.NEGATIVE_INFINITY) {
 					Point2D pos = vp.getPosition();
@@ -187,21 +170,8 @@ public class FortunePlotter extends Thread {
 					xvals = q.intersectLine(l);
 					drawQuadratic(q,fromX,toX);
 
-					// if (xvals != null) {
-					// fromX = Math.max(0, Math.min(xvals[0], xvals[1]));
-					// toX = Math.min(panel.getWidth(), Math.max(xvals[0],
-					// xvals[1]));
-
-					// System.out.println("q=" + q + ",xvals.size="
-					// + xvals.length + ",xvals[0]=" + xvals[0]
-					// + ",xvals[1]=" + xvals[1]);
-
-					// drawQuadratic(q, fromX, toX);
-					// }
 				}
-			} else {
-				// System.out.println("No site found, vp=" + vp);
-			}
+			} 
 		}
 	}
 

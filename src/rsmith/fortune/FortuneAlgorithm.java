@@ -51,8 +51,6 @@ public class FortuneAlgorithm {
 		System.out.println("verifyBeachline:vernum="+vernum);
 		FortuneData data = getFortuneData();
 		Iterator<VoronoiNode> iter =data.getBeachline().iterator();
-		double sweepY = data.getSweepY();
-		VoronoiNode last = null;
 		VoronoiNode current = null;
 		System.out.print("[");
 		while(iter.hasNext()) {
@@ -177,7 +175,7 @@ public class FortuneAlgorithm {
 		// the breakpoints that lie to the left and right of this arc
 		BreakPoint previous = leftBP.getPrevious();
 		BreakPoint next = rightBP.getNext();
-		System.out.println("previous.id="+previous.getID()+",next.id="+next.getID());
+		System.out.println("previous.id="+(previous!=null?previous.getID():null)+",next.id="+(next!=null?next.getID():null));
 		// the sites that generate the arcs lying to the left and right
 		// of the disappearing arc
 		SitePoint left = leftBP.getLeft();

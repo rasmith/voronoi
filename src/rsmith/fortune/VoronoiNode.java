@@ -4,7 +4,6 @@ import java.awt.geom.Point2D;
 
 import rsmith.fortune.event.CircleEvent;
 import rsmith.fortune.point.BreakPoint;
-import rsmith.fortune.point.SitePoint;
 import rsmith.fortune.point.VoronoiPoint;
 import rsmith.util.PointUtils;
 

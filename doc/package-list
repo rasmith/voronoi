@@ -1,1 +1,7 @@
-rsmith
+rsmith.fortune
+rsmith.fortune.event
+rsmith.fortune.point
+rsmith.geom
+rsmith.test
+rsmith.ui
+rsmith.util
