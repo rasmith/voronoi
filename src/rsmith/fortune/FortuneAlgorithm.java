@@ -168,16 +168,16 @@ public class FortuneAlgorithm {
 	}
 
 	public void handleCircleEvent(CircleEvent ce) {
-		System.out.println("handleCircleEvent:y="+fortuneData.getSweepY());
+		System.out.println("handleCircleEvent:y="+fortuneData.getSweepY()+"-----------------");
 		// the breakpoints representing the disappearing arc
 		BreakPoint leftBP = ce.getLeftBP();
 		BreakPoint rightBP = ce.getRightBP();
-		System.out.println("handleCircleEvent:leftBP.id="+leftBP.getID()+",rightBP.id="+rightBP.getID());
+		System.out.println("leftBP.id="+leftBP.getID()+",rightBP.id="+rightBP.getID());
 
 		// the breakpoints that lie to the left and right of this arc
 		BreakPoint previous = leftBP.getPrevious();
 		BreakPoint next = rightBP.getNext();
-
+		System.out.println("previous.id="+previous.getID()+",next.id="+next.getID());
 		// the sites that generate the arcs lying to the left and right
 		// of the disappearing arc
 		SitePoint left = leftBP.getLeft();
@@ -187,7 +187,7 @@ public class FortuneAlgorithm {
 		fortuneData.removeBreakPoint(leftBP);
 		fortuneData.removeBreakPoint(rightBP);
 
-		// check to see if the current arc has any other current circle events
+		// check to see if the current arc has any other current circle events and remove those
 		fortuneData.clearCircleEvent(previous);
 		fortuneData.clearCircleEvent(rightBP);
 
@@ -199,6 +199,7 @@ public class FortuneAlgorithm {
 		// insert the two new circle events
 		fortuneData.insertCircleEvent(previous, b);
 		fortuneData.insertCircleEvent(b, next);
+		System.out.println("-------------------------------");
 	}
 
 	/**
