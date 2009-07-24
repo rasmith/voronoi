@@ -33,7 +33,6 @@ public class FortuneData {
 		sites = new TreeSet<SitePoint>();
 	}
 
-	
 	/**
 	 * @return event queue
 	 */
@@ -140,10 +139,10 @@ public class FortuneData {
 		b.setRight(right);
 		VoronoiNode node = new VoronoiNode(b, null, this);
 		b.setNode(node);
-		if(previous != null) {
+		if (previous != null) {
 			previous.setNext(b);
 		}
-		if(next != null) {
+		if (next != null) {
 			next.setPrevious(b);
 		}
 		beachline.add(node);
@@ -156,10 +155,10 @@ public class FortuneData {
 	public void removeBreakPoint(BreakPoint b) {
 		BreakPoint previous = b.getPrevious();
 		BreakPoint next = b.getNext();
-		if(previous != null ) {
+		if (previous != null) {
 			previous.setNext(next);
 		}
-		if(next != null) {
+		if (next != null) {
 			next.setPrevious(previous);
 		}
 		boolean result = beachline.remove(b.getNode());

@@ -40,7 +40,6 @@ public class SitePoint extends AbstractPoint implements Comparable<SitePoint>,
 		Quadratic q = new Quadratic(A, B, C);
 		return q;
 	}
-	
 
 	/**
 	 * @return (x,y) coordinate of this site
@@ -96,8 +95,7 @@ public class SitePoint extends AbstractPoint implements Comparable<SitePoint>,
 	public int compareTo(SitePoint o) {
 		return PointUtils.comparePointsX(this.getPosition(), o.getPosition());
 	}
-	
-	
+
 	public String getType() {
 		return "site";
 	}

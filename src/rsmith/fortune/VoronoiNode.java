@@ -26,8 +26,8 @@ public class VoronoiNode implements Comparable<VoronoiNode> {
 		int result = 0;
 		VoronoiPoint vp = this.getPoint();
 		VoronoiPoint vq = vn.getPoint();
-		if(vp instanceof BreakPoint &&  vq instanceof BreakPoint) {
-			result = ((BreakPoint)(vp)).compareTo((BreakPoint)vq);
+		if (vp instanceof BreakPoint && vq instanceof BreakPoint) {
+			result = ((BreakPoint) (vp)).compareTo((BreakPoint) vq);
 		} else {
 			Point2D p = vp.getPosition();
 			Point2D q = vq.getPosition();
@@ -66,7 +66,7 @@ public class VoronoiNode implements Comparable<VoronoiNode> {
 	public void setFortuneData(FortuneData voronoi) {
 		this.fortuneData = voronoi;
 	}
-	
+
 	public String toString() {
 		return getPoint().toString();
 	}

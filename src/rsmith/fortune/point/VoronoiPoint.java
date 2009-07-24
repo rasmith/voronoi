@@ -10,6 +10,6 @@ public interface VoronoiPoint {
 	public void setNode(VoronoiNode node);
 
 	public VoronoiNode getNode();
-	
+
 	public String getType();
 }

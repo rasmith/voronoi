@@ -120,23 +120,30 @@ public class BreakPoint extends AbstractPoint implements
 	@Override
 	public int compareTo(BreakPoint bp) {
 		int result = 0;
-		if(this == bp) {
+		if (bp.getID() == 44) {
+			System.out.println("compareTo got ID 44");
+		}
+		if (this == bp) {
 			result = 0;
-		} else
-		if(bp.getNext() == this || this.getNext() == bp) {
-			result = ( this.getNext() == bp ? -1 : 1);
+		} else if (bp.getNext() == this || this.getNext() == bp) {
+			result = (this.getNext() == bp ? -1 : 1);
 		} else {
-			result = PointUtils.comparePointsX(this.getPosition(), bp.getPosition());
+			result = PointUtils.comparePointsX(this.getPosition(), bp
+					.getPosition());
 		}
 		return result;
 	}
-	
-	public double  [] intersectLeft(double y) {
-		return this.getLeft().createQuadratic(this.getNode().getFortuneData().getSweepY()).intersectLine(new Line(0,y));
+
+	public double[] intersectLeft(double y) {
+		return this.getLeft().createQuadratic(
+				this.getNode().getFortuneData().getSweepY()).intersectLine(
+				new Line(0, y));
 	}
-	
-	public double [] intersectRight(double y) {
-		return this.getRight().createQuadratic(this.getNode().getFortuneData().getSweepY()).intersectLine(new Line(0,y));
+
+	public double[] intersectRight(double y) {
+		return this.getRight().createQuadratic(
+				this.getNode().getFortuneData().getSweepY()).intersectLine(
+				new Line(0, y));
 	}
 
 	public SitePoint getSiteAtSweep() {
@@ -144,14 +151,13 @@ public class BreakPoint extends AbstractPoint implements
 		SitePoint result = null;
 		if (this.getLeft().getPosition().getY() == sweepY) {
 			result = this.getLeft();
-		} else
-		if (this.getRight().getPosition().getY() == sweepY) {
+		} else if (this.getRight().getPosition().getY() == sweepY) {
 			result = this.getRight();
 		}
 		return result;
 	}
-	
-	public boolean  hasSiteAtSweep() {
+
+	public boolean hasSiteAtSweep() {
 		SitePoint site = getSiteAtSweep();
 		return (site != null);
 	}
@@ -231,7 +237,7 @@ public class BreakPoint extends AbstractPoint implements
 			return false;
 		return true;
 	}
-	
+
 	public String getType() {
 		return "breakpoint";
 	}
