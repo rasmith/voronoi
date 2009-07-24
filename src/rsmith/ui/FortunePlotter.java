@@ -1,5 +1,6 @@
 package rsmith.ui;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.geom.Point2D;
 import java.util.HashSet;
@@ -15,6 +16,7 @@ import rsmith.fortune.point.SitePoint;
 import rsmith.fortune.point.VoronoiPoint;
 import rsmith.geom.Line;
 import rsmith.geom.Quadratic;
+import rsmith.util.PointUtils;
 
 
 public class FortunePlotter extends Thread {
@@ -29,7 +31,7 @@ public class FortunePlotter extends Thread {
 	}
 
 	private void init() {
-		Point2D.Double [] testPoints  = {
+		/**Point2D.Double [] testPoints  = {
 				new Point2D.Double(214.33016065965256,267.26155674871404),
 				new Point2D.Double(185.91982703582931,173.9413503911116),
 				new Point2D.Double(249.17348213997917,176.29054413956277),
@@ -39,11 +41,23 @@ public class FortunePlotter extends Thread {
 				new Point2D.Double(278.42154200153936,219.55123585241193),
 				new Point2D.Double(280.1723056750386,125.31368823793328),
 				new Point2D.Double(141.66704014556166,130.00460088413675),
-				new Point2D.Double(160.20875408755992,201.71569526342256)};
-		
+				new Point2D.Double(160.20875408755992,201.71569526342256)};**/
+		Point2D.Double [] testPoints = {
+				new Point2D.Double(237.36119290954156,255.6685266151402),
+				new Point2D.Double(179.7875967515497,148.47826578522196),
+				new Point2D.Double(167.48144769934447,268.18940438068785),
+				new Point2D.Double(116.27080806031805,230.90621514713007),
+				new Point2D.Double(151.74754191370482,294.95082985362603),
+				new Point2D.Double(221.42612211139917,166.77211211609512),
+				new Point2D.Double(128.94029585646277,281.5510405891649),
+				new Point2D.Double(128.31076682011366,116.85176995793893),
+				new Point2D.Double(178.5950932404774,168.49640907388522),
+				new Point2D.Double(118.54249622085746,183.45825202723847)
+		};
 		points = new HashSet<Point2D>();
 		for (int i = 0; i < 10; i++) {
-			Point2D p = testPoints[i];//PointUtils.randomPoint(100,300);
+			Point2D p = testPoints[i];
+			//Point2D p = PointUtils.randomPoint(100,300);
 			//System.out.print("new Point2D.Double("+p.getX()+","+p.getY()+"),");
 			points.add(p);
 		}
@@ -63,11 +77,15 @@ public class FortunePlotter extends Thread {
 
 	public void drawPoint2D(Point2D p) {
 		Graphics g = panel.getGraphics();
-		g.drawOval((int) p.getX(), (int) p.getY(), 2, 2);
+		Color c = new Color(0xFF0000);
+		g.setColor(c);
+		g.fillOval((int) p.getX()-2, (int) p.getY()-2, 5, 5);
 	}
 
 	public void drawHorizontalLine(double value) {
 		Graphics g = panel.getGraphics();
+		Color c = new Color(0x0000FF);
+		g.setColor(c);
 		g.drawLine(0, (int) value, (int) panel.getWidth(), (int) value);
 	}
 
@@ -95,40 +113,13 @@ public class FortunePlotter extends Thread {
 		Graphics g = panel.getGraphics();
 		g.clearRect(0, 0, panel.getWidth(), panel.getHeight());
 	}
-
-	public void _draw() {
-		/**
-		FortuneData data = fortune.getFortuneData();
-		Iterator<VoronoiNode> iter =data.getBeachline().iterator();
-		double sweepY = data.getSweepY();
-		VoronoiNode last = null;
-		VoronoiNode current = null;
-		System.out.print("[");
-		while(iter.hasNext()) {
-			current = iter.next();
-			if(current.getPoint() instanceof BreakPoint) {
-				BreakPoint bp = (BreakPoint)current.getPoint();
-				BreakPoint bpn = bp.getNext();
-				if(bpn != null && bpn.getPosition().getX() < bp.getPosition().getX()) {
-					System.out.println("Found breakpoints out of order (bp,bpn):"+bp.getPosition()+","+bpn.getPosition());
-				}
-				BreakPoint bpp = bp.getPrevious();
-				if(bpp != null && bpp.getPosition().getX() > bp.getPosition().getX()) {
-					System.out.println("Found breakpoints out of order (bp,bpp)"+ bp.getPosition() + "," + bpp.getPosition());
-				}
-			} else {
-				if(data.getBeachline().size() > 1) {
-					System.out.println("Found a site point when should not have.");
-				}
-			}
-		}
-		System.out.println("]");**/
-	}
 	
 	public void draw() {
 		Iterator<VoronoiNode> iter = fortune.getFortuneData().getBeachline()
 				.iterator();
 		panel.getGraphics().clearRect(0, 0, panel.getWidth(), panel.getHeight());
+		double sweep = getFortune().getFortuneData().getSweepY();
+		drawHorizontalLine(sweep);
 		while (iter.hasNext()) {
 			VoronoiNode node = iter.next();
 			VoronoiPoint vp = node.getPoint();
@@ -140,18 +131,24 @@ public class FortunePlotter extends Thread {
 		}
 	}
 	
+	
 	public void drawBreakPoint(BreakPoint b) {
-		if(b.hasSiteAtSweep()) {
-		} else {
-			if(b.getPrevious() == null) {;
-			} else if(b.getNext() == null) {
-			} else {
-				drawPoint2D(b.getPosition());
-				drawPoint2D(b.getNext().getPosition());
-				drawQuadratic(	b.getRight().createQuadratic(this.getFortune().getFortuneData().getSweepY()),
-								b.getPosition().getX(),
-								b.getNext().getPosition().getX());
-			}
+		drawPoint2D(b.getPosition());
+		if(b.hasSiteAtSweep() && b.getNext() != null && b.getNext().hasSiteAtSweep()) {
+			drawVerticalLine(b.getPosition().getX(),this.getFortune().getFortuneData().getSweepY(), b.getPosition().getY());
+		} 
+		
+		double sweep = getFortune().getFortuneData().getSweepY();
+		Quadratic q = b.getRight().createQuadratic(sweep);
+		
+		if(b.getPrevious() == null) {
+			Quadratic r = b.getLeft().createQuadratic(sweep);
+			this.drawQuadratic(r, b.intersectLeft(panel.getHeight())[0], b.getPosition().getX());
+		}
+		
+		if(!(b.hasSiteAtSweep() && b.getNext() != null && b.getNext().hasSiteAtSweep())) {
+			double toX = (b.getNext() != null ? b.getNext().getPosition().getX() : b.intersectRight(panel.getHeight())[1]);
+			this.drawQuadratic(q, b.getPosition().getX(), toX);
 		}
 	}
 
@@ -162,9 +159,9 @@ public class FortunePlotter extends Thread {
 		try {
 			while (!fortune.isFinished()) {
 				if (panel.getGraphics() != null) {
-					draw();
-					// System.out.println("");
 					fortune.step();
+					draw();
+					
 				}
 				sleep(500);
 			}

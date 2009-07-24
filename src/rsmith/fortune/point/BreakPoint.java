@@ -2,6 +2,7 @@ package rsmith.fortune.point;
 
 import java.awt.geom.Point2D;
 
+import rsmith.geom.Line;
 import rsmith.geom.Quadratic;
 import rsmith.util.PointUtils;
 
@@ -119,12 +120,23 @@ public class BreakPoint extends AbstractPoint implements
 	@Override
 	public int compareTo(BreakPoint bp) {
 		int result = 0;
-		if(bp.hasSiteAtSweep() && this.hasSiteAtSweep()) {
-			result = (this == bp? 0 : (this.getNext() == bp ? -1 : 1));
+		if(this == bp) {
+			result = 0;
+		} else
+		if(bp.getNext() == this || this.getNext() == bp) {
+			result = ( this.getNext() == bp ? -1 : 1);
 		} else {
 			result = PointUtils.comparePointsX(this.getPosition(), bp.getPosition());
 		}
 		return result;
+	}
+	
+	public double  [] intersectLeft(double y) {
+		return this.getLeft().createQuadratic(this.getNode().getFortuneData().getSweepY()).intersectLine(new Line(0,y));
+	}
+	
+	public double [] intersectRight(double y) {
+		return this.getRight().createQuadratic(this.getNode().getFortuneData().getSweepY()).intersectLine(new Line(0,y));
 	}
 
 	public SitePoint getSiteAtSweep() {
@@ -138,8 +150,8 @@ public class BreakPoint extends AbstractPoint implements
 		}
 		return result;
 	}
-
-	public Boolean hasSiteAtSweep() {
+	
+	public boolean  hasSiteAtSweep() {
 		SitePoint site = getSiteAtSweep();
 		return (site != null);
 	}

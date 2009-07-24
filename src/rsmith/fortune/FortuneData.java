@@ -162,7 +162,7 @@ public class FortuneData {
 		if(next != null) {
 			next.setPrevious(previous);
 		}
-		beachline.remove(b.getNode());
+		boolean result = beachline.remove(b.getNode());
 	}
 
 	/**
