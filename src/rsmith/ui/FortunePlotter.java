@@ -18,6 +18,7 @@ import rsmith.fortune.point.VoronoiPoint;
 import rsmith.geom.CoordinateMap;
 import rsmith.geom.Line;
 import rsmith.geom.Quadratic;
+import rsmith.util.PointUtils;
 
 public class FortunePlotter extends Thread {
 
@@ -77,8 +78,8 @@ public class FortunePlotter extends Thread {
 
 		for (int i = 0; i < 10; i++) {
 			Point2D p = testPoints[i];
-			// Point2D p = PointUtils.randomPoint(100,300);
-			// System.out.print("new Point2D.Double("+p.getX()+","+p.getY()+"),");
+			// Point2D p = PointUtils.randomPoint(200,300);
+			System.out.print("new Point2D.Double("+p.getX()+","+p.getY()+"),");
 			points.add(p);
 		}
 		fortune = new FortuneAlgorithm(points);
@@ -91,19 +92,22 @@ public class FortunePlotter extends Thread {
 	}
 
 	public void drawPoint2D(Point2D p) {
+		Color c = new Color(0xFF0000);
+		drawPoint2D(p,c);
+	}
+
+	public void drawPoint2D(Point2D p, Color c) {
 		Graphics g = panel.getGraphics();
 		Point2D q = cmap.map(p);
-		System.out.println("drawPoint2D:p=" + p + ",q=" + q);
-		Color c = new Color(0xFF0000);
 		g.setColor(c);
 		g.fillOval((int) q.getX() - 2, (int) q.getY() - 2, 5, 5);
 	}
-
+	
 	public void drawLine(Point2D p1, Point2D p2) {
 		Graphics g = panel.getGraphics();
 		Point2D q1 = cmap.map(p1);
 		Point2D q2 = cmap.map(p2);
-		g.drawLine((int) q1.getX(), (int) q2.getY(), (int) q2.getX(), (int) q2
+		g.drawLine((int) q1.getX(), (int) q1.getY(), (int) q2.getX(), (int) q2
 				.getY());
 	}
 
@@ -168,9 +172,10 @@ public class FortunePlotter extends Thread {
 	}
 
 	public void drawSitePoint(SitePoint s) {
+		drawPoint2D(s.getPosition(),new Color(0x0000FF));
 	}
 
-	public void draw() {
+	public void drawBeachline() {
 		Iterator<VoronoiNode> iter = fortune.getFortuneData().getBeachline()
 				.iterator();
 		panel.getGraphics()
@@ -182,24 +187,35 @@ public class FortunePlotter extends Thread {
 			VoronoiPoint vp = node.getPoint();
 			if (vp instanceof BreakPoint) {
 				drawBreakPoint((BreakPoint) vp);
-			} else {
-				drawSitePoint((SitePoint) vp);
-			}
+			} 
 		}
 	}
 
+	public void drawSites() {
+		Set<SitePoint> points = this.fortune.getFortuneData().getSites();
+		Iterator<SitePoint> iter = points.iterator();
+		while(iter.hasNext()) {
+			drawSitePoint(iter.next());
+		}
+	}
+	
+	public void draw() {	
+		fortune.step();
+		drawBeachline();
+		drawSites();
+	}
+	
 	public void run() {
 		try {
-			while (!fortune.isFinished()) {
+			while (!this.fortune.isFinished()) {
 				if (panel.getGraphics() != null) {
 					if (cmap == null) {
-						cmap = new CoordinateMap(new Rectangle2D.Double(1000,
-								1000, 2000, 2000), new Rectangle2D.Double(0, 0,
+						cmap = new CoordinateMap(new Rectangle2D.Double(-500,
+								-600, 1000, 1000) ,new Rectangle2D.Double(0, 0,
 								panel.getWidth(), panel.getHeight()));
 					}
-					fortune.step();
 					draw();
-				}
+				}		
 				sleep(500);
 			}
 		} catch (InterruptedException e) {
