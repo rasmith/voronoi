@@ -34,18 +34,17 @@ public class CircleEvent extends AbstractSweepEvent implements SweepEvent {
 		return eventY;
 	}
 
-
 	public static Point2D computeCircle(Point2D pi, Point2D pj, Point2D pk) {
 		Point2D result = null;
-		
-		 Line l1 = Line.bisector(pi, pj);
-		 Line l2 = Line.bisector(pj, pk);
-		 
-		 result = l1.intersect(l2);
+
+		Line l1 = Line.bisector(pi, pj);
+		Line l2 = Line.bisector(pj, pk);
+
+		result = l1.intersect(l2);
 
 		return result;
 	}
-	
+
 	public static CircleEvent createCircleEvent(double sweep, SitePoint pi,
 			SitePoint pj, SitePoint pk) {
 		CircleEvent result = null;

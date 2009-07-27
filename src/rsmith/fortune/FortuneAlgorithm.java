@@ -9,6 +9,7 @@ import rsmith.fortune.event.CircleEvent;
 import rsmith.fortune.event.SiteEvent;
 import rsmith.fortune.event.SweepEvent;
 import rsmith.fortune.point.*;
+import rsmith.geom.Quadratic;
 
 public class FortuneAlgorithm {
 	private FortuneData fortuneData = null;
@@ -80,85 +81,71 @@ public class FortuneAlgorithm {
 
 		}
 		// System.out.println("]");
+		Iterator<SitePoint> piter = data.getSites().iterator();
+		while (piter.hasNext()) {
+			SitePoint p = piter.next();
+			Point2D pos = p.getPosition();
+			if (p.isProcessed()  && pos.getY()  != data.getSweepY()) {
+				Arc a = data.findArcAbove(p);
+				SitePoint q = a.getSite();
+				Quadratic f = q.createQuadratic(this.getFortuneData().getSweepY());
+				double yval = f.eval(pos.getX());
+				if(yval > pos.getY()) {
+					System.out.println("Processed point,p=("+pos.getX()+","+pos.getY()+"), should be behind beachline, ybeach="+yval+".");
+				}
+			}
+
+		}
 	}
 
 	public void handleSiteEvent(SiteEvent se) {
 		System.out.println("handleSiteEvent:y=" + fortuneData.getSweepY());
 		NavigableSet<VoronoiNode> beachline = fortuneData.getBeachline();
 
-		if (beachline.isEmpty()) {
-			beachline.add(new VoronoiNode(se.getSite(), null, this
-					.getFortuneData()));
-			return;
-		}
 		SitePoint p = se.getSite();
-		BreakPoint bl = null;
-		BreakPoint br = null;
-		VoronoiNode vp = new VoronoiNode(p, null, this.getFortuneData());
-		SitePoint q = null;
-		// find arc above the site p
-		if (getFortuneData().getBeachline().size() == 1) {
-			// if there is only one element in the tree
-			// then just remove it and get its point q
-			VoronoiNode vn = fortuneData.getBeachline().first();
-			fortuneData.getBeachline().remove(vn);
-			q = (SitePoint) vn.getPoint();
+		if (beachline.isEmpty()) {
+			beachline.add(new VoronoiNode(p, null, this.getFortuneData()));
 		} else {
-			// if there is more than one element then
-			// get the breakpoints bl and br that
-			// lie immediately to the left and right of p
-			VoronoiNode before = beachline.floor(vp); // this gets the nodes
-			VoronoiNode after = beachline.ceiling(vp);
-			// get the corresponding breakpoints
-			bl = (before != null ? (BreakPoint) before.getPoint() : null);
-			br = (after != null ? (BreakPoint) after.getPoint() : null);
-			Arc arc = getFortuneData().findArcAbove(p);
-			assert (!(bl == null && br == null));
-			if (bl != null && br != null && bl.getRight() != br.getLeft()) {
-				// System.out.println("bl.getRight() == br.getLeft()  should hold");
-			} else if (bl != null && br != null
-					&& bl.getRight() == br.getLeft()) {
-				// System.out.println("bl.getRight() == br.getLeft() holds.");
-			}
-			// if bl is null, then use br
-			if (bl == null && br != null) {
-				q = br.getLeft();
+			BreakPoint bl = null;
+			BreakPoint br = null;
+			SitePoint q = null;
+			// find arc above the site p
+			if (getFortuneData().getBeachline().size() == 1) {
+				// if there is only one element in the tree
+				// then just remove it and get its point q
+				VoronoiNode vn = fortuneData.getBeachline().first();
+				fortuneData.getBeachline().remove(vn);
+				q = (SitePoint) vn.getPoint();
 			} else {
-				// if we get here we know that it is not the case that (bl ==
-				// null && br == null)
-				// is true, so bl cannot be null here since that means size=1
-				// and we know that size>1
-				// at this point, so there must be at least one breakpoint, or
-				// at least it should not be the case
-				// furthermore, if bl is not null, then either br is null or it
-				// isn't.
-				// if br is null then we just use bl.right, otherwise
-				// we still use bl.right so in either case, b
-				q = bl.getRight();
+				Arc arc = getFortuneData().findArcAbove(p);
+
+				bl = arc.getLeft();
+				br = arc.getRight();
+				q = arc.getSite();
 			}
+
+			// we should have q at this point
+			assert (q != null);
+			if (q == null) {
+				System.out.println("q was null");
+			}
+
+			// create the two new breakpoints that will intersect this arc
+			BreakPoint b1 = new BreakPoint();
+			BreakPoint b2 = new BreakPoint();
+
+			VoronoiNode vb1 = fortuneData.insertBreakPoint(b1, bl, b2, q, p);
+			VoronoiNode vb2 = fortuneData.insertBreakPoint(b2, b1, br, p, q);
+
+			verifyBeachline();
+
+			fixCircleEvent(bl, br);
+
+			if (beachline.size() > 2) {
+				fortuneData.insertCircleEvents(vb1, vb2);
+			}
+			verifyBeachline();
 		}
-
-		// we should have q at this point
-		assert (q != null);
-		if (q == null) {
-			System.out.println("q was null");
-		}
-
-		// create the two new breakpoints that will intersect this arc
-		BreakPoint b1 = new BreakPoint();
-		BreakPoint b2 = new BreakPoint();
-
-		VoronoiNode vb1 = fortuneData.insertBreakPoint(b1, bl, b2, q, p);
-		VoronoiNode vb2 = fortuneData.insertBreakPoint(b2, b1, br, p, q);
-		verifyBeachline();
-
-		fixCircleEvent(bl, br);
-
-		if (beachline.size() > 2) {
-			fortuneData.insertCircleEvents(vb1, vb2);
-		}
-		verifyBeachline();
-
 		p.setProcessed(true);
 	}
 
@@ -173,7 +160,7 @@ public class FortuneAlgorithm {
 
 	public void handleCircleEvent(CircleEvent ce) {
 		System.out.println("handleCircleEvent:y=" + fortuneData.getSweepY());
-		
+
 		// System.out.println("handleCircleEvent:y="+fortuneData.getSweepY()+"-----------------");
 		// the breakpoints representing the disappearing arc
 		BreakPoint leftBP = ce.getLeftBP();
@@ -204,6 +191,7 @@ public class FortuneAlgorithm {
 		fortuneData.insertCircleEvent(previous, b);
 		fortuneData.insertCircleEvent(b, next);
 
+		verifyBeachline();
 		// System.out.println("-------------------------------");
 	}
 

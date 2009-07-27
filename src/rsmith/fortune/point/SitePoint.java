@@ -14,7 +14,7 @@ public class SitePoint extends AbstractPoint implements Comparable<SitePoint>,
 
 	private Point2D position;
 	private boolean processed = false;
-	
+
 	/**
 	 * @param p
 	 */
@@ -45,7 +45,7 @@ public class SitePoint extends AbstractPoint implements Comparable<SitePoint>,
 	/**
 	 * @return (x,y) coordinate of this site
 	 */
-	public Point2D getPosition() {
+	protected Point2D getCurrentPosition() {
 		return position;
 	}
 

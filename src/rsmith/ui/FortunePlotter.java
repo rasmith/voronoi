@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 
 import rsmith.fortune.FortuneAlgorithm;
 import rsmith.fortune.VoronoiNode;
+import rsmith.fortune.point.AbstractPoint;
 import rsmith.fortune.point.BreakPoint;
 import rsmith.fortune.point.SitePoint;
 import rsmith.fortune.point.VoronoiPoint;
@@ -28,16 +29,16 @@ public class FortunePlotter extends Thread {
 	private Set<Point2D> points = null;
 	private CoordinateMap cmap = null;
 	private boolean initialized = false;
-	
+
 	public FortunePlotter(JPanel panel) {
 		this.panel = panel;
 	}
 
 	private void init() {
-		if(panel.getGraphics() == null) {
+		if (panel.getGraphics() == null) {
 			return;
 		}
-		initialized=true;
+		initialized = true;
 
 		/**
 		 * Point2D.Double [] testPoints = { new
@@ -67,40 +68,41 @@ public class FortunePlotter extends Thread {
 		 * Point2D.Double(118.54249622085746,183.45825202723847) };
 		 **/
 
-		/**Point2D.Double[] testPoints = {
-				
-				new Point2D.Double(147.0732584314681, 173.80750919307016),
-				new Point2D.Double(263.31902555019417, 110.70763416050802),
-				new Point2D.Double(200.60694344015295, 135.30725512849017),
-				new Point2D.Double(106.74378961632263, 166.5574141904719),
-				new Point2D.Double(170.78343469042176, 178.70935879334104),
-				new Point2D.Double(234.51289732321888, 176.90372302999197),
-				new Point2D.Double(287.2844812704159, 233.79119934395928),
-				new Point2D.Double(103.41700707279446, 116.56491337735835),
-				new Point2D.Double(120.59588768125184, 119.62844811685294),
-				new Point2D.Double(231.05151947085594, 295.2391255003456) };
-		***/
-		
-		Point2D.Double []  testPoints = {
-				new Point2D.Double(225.07572734218084,373.3250018589953),
-				new Point2D.Double(453.6545808366297,354.2050780216746),
-				new Point2D.Double(261.260290385394,343.2367065919145),
-				new Point2D.Double(348.1461860932294,231.67015557305558),
-				new Point2D.Double(434.84505860429806,205.36575235215395)
-		};
+		/**
+		 * Point2D.Double[] testPoints = {
+		 * 
+		 * new Point2D.Double(147.0732584314681, 173.80750919307016), new
+		 * Point2D.Double(263.31902555019417, 110.70763416050802), new
+		 * Point2D.Double(200.60694344015295, 135.30725512849017), new
+		 * Point2D.Double(106.74378961632263, 166.5574141904719), new
+		 * Point2D.Double(170.78343469042176, 178.70935879334104), new
+		 * Point2D.Double(234.51289732321888, 176.90372302999197), new
+		 * Point2D.Double(287.2844812704159, 233.79119934395928), new
+		 * Point2D.Double(103.41700707279446, 116.56491337735835), new
+		 * Point2D.Double(120.59588768125184, 119.62844811685294), new
+		 * Point2D.Double(231.05151947085594, 295.2391255003456) };
+		 ***/
+
+		Point2D.Double[] testPoints = {
+				new Point2D.Double(225.07572734218084, 373.3250018589953),
+				new Point2D.Double(453.6545808366297, 354.2050780216746),
+				new Point2D.Double(261.260290385394, 343.2367065919145),
+				new Point2D.Double(348.1461860932294, 231.67015557305558),
+				new Point2D.Double(434.84505860429806, 205.36575235215395) };
 		int w = panel.getWidth();
 		int h = panel.getHeight();
-		
-		cmap = new CoordinateMap(new Rectangle2D.Double(0,
-				0, w,h) ,new Rectangle2D.Double(0, 0,
-				w, h));
-		
+
+		cmap = new CoordinateMap(new Rectangle2D.Double(0,800,1000,1000),
+				new Rectangle2D.Double(0, 0, w, h));
+
 		points = new HashSet<Point2D>();
 
 		for (int i = 0; i < 5; i++) {
 			Point2D p = testPoints[i];
-		//	 Point2D p = new Point2D.Double(NumberUtils.randomNumber(w/4,3*w/4), NumberUtils.randomNumber(h/4, 3*h/4));
-		//	System.out.print("new Point2D.Double("+p.getX()+","+p.getY()+"),");
+			// Point2D p = new
+			// Point2D.Double(NumberUtils.randomNumber(w/4,3*w/4),
+			// NumberUtils.randomNumber(h/4, 3*h/4));
+			// System.out.print("new Point2D.Double("+p.getX()+","+p.getY()+"),");
 			points.add(p);
 		}
 		fortune = new FortuneAlgorithm(points);
@@ -114,7 +116,7 @@ public class FortunePlotter extends Thread {
 
 	public void drawPoint2D(Point2D p) {
 		Color c = new Color(0xFF0000);
-		drawPoint2D(p,c);
+		drawPoint2D(p, c);
 	}
 
 	public void drawPoint2D(Point2D p, Color c) {
@@ -123,7 +125,7 @@ public class FortunePlotter extends Thread {
 		g.setColor(c);
 		g.fillOval((int) q.getX() - 2, (int) q.getY() - 2, 5, 5);
 	}
-	
+
 	public void drawLine(Point2D p1, Point2D p2) {
 		Graphics g = panel.getGraphics();
 		Point2D q1 = cmap.map(p1);
@@ -144,8 +146,8 @@ public class FortunePlotter extends Thread {
 	}
 
 	public void drawHorizontalLine(double value) {
-		drawLine(cmap.getSourceRect().getY(), value, cmap.getSourceRect()
-				.getWidth(), value);
+		drawLine(	cmap.getSourceRect().getX(),value,
+					cmap.getSourceRect().getX() + cmap.getSourceRect().getWidth(), value);
 	}
 
 	public void drawVerticalLine(double xval, double yfrom, double yto) {
@@ -153,7 +155,7 @@ public class FortunePlotter extends Thread {
 	}
 
 	public void drawQuadratic(Quadratic q, double fromX, double toX) {
-		double delta = 0.05;
+		double delta = 0.5;
 		for (double xval = fromX; xval <= toX - delta; xval = Math.min(xval
 				+ delta, toX)) {
 			if (xval < toX) {
@@ -193,7 +195,7 @@ public class FortunePlotter extends Thread {
 	}
 
 	public void drawSitePoint(SitePoint s) {
-		drawPoint2D(s.getPosition(),new Color(0x0000FF));
+		drawPoint2D(s.getPosition(), (s.isProcessed() ? new Color(0xFF00FF) : new Color(0x0000FF)) );
 	}
 
 	public void drawBeachline() {
@@ -208,34 +210,36 @@ public class FortunePlotter extends Thread {
 			VoronoiPoint vp = node.getPoint();
 			if (vp instanceof BreakPoint) {
 				drawBreakPoint((BreakPoint) vp);
-			} 
+			}
 		}
 	}
 
 	public void drawSites() {
 		Set<SitePoint> points = this.fortune.getFortuneData().getSites();
 		Iterator<SitePoint> iter = points.iterator();
-		while(iter.hasNext()) {
+		while (iter.hasNext()) {
 			drawSitePoint(iter.next());
 		}
 	}
-	
-	public void draw() {	
+
+	public void draw() {
 		fortune.step();
 		drawBeachline();
 		drawSites();
 	}
-	
+
 	public void run() {
 		try {
-			while (!initialized || !this.fortune.isFinished() ) {
-				if(!initialized) {
+			while (!initialized || !this.fortune.isFinished()) {
+				if (!initialized) {
 					init();
 				} else {
-					draw();	
+					draw();
 					sleep(500);
 				}
 			}
+			Rectangle2D box = AbstractPoint.getBoundingBox();
+			System.out.println("Bounding box: (x,y,w,h)=("+box.getX()+","+box.getY()+","+box.getWidth()+","+box.getHeight()+")");
 		} catch (InterruptedException e) {
 		}
 	}

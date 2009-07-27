@@ -101,7 +101,7 @@ public class BreakPoint extends AbstractPoint implements
 	/**
 	 * @return the current (x,y) coordinate of this breakpoint
 	 */
-	public Point2D getPosition() {
+	protected Point2D getCurrentPosition() {
 		double sweepY = getNode().getFortuneData().getSweepY();
 		if (position == null || sweepY != lastSweepY) {
 			lastSweepY = sweepY;

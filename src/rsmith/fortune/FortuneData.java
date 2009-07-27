@@ -105,15 +105,17 @@ public class FortuneData {
 	public double getSweepY() {
 		return sweepY;
 	}
-	
+
 	public Arc findArcAbove(SitePoint p) {
 		Arc result = null;
 		VoronoiNode vp = new VoronoiNode(p, null, this);
-		VoronoiNode before  = beachline.floor(vp);
+		VoronoiNode before = beachline.floor(vp);
 		VoronoiNode after = beachline.ceiling(vp);
-		BreakPoint left  = (before != null ? (BreakPoint)before.getPoint() : null);
-		BreakPoint right = (after != null  ? (BreakPoint)after.getPoint()  : null);
-		result = new Arc(left,right);
+		BreakPoint left = (before != null ? (BreakPoint) before.getPoint()
+				: null);
+		BreakPoint right = (after != null ? (BreakPoint) after.getPoint()
+				: null);
+		result = new Arc(left, right);
 		return result;
 	}
 
