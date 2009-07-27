@@ -120,9 +120,6 @@ public class BreakPoint extends AbstractPoint implements
 	@Override
 	public int compareTo(BreakPoint bp) {
 		int result = 0;
-		if (bp.getID() == 44) {
-			System.out.println("compareTo got ID 44");
-		}
 		if (this == bp) {
 			result = 0;
 		} else if (bp.getNext() == this || this.getNext() == bp) {

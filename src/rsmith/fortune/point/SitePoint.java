@@ -13,7 +13,8 @@ public class SitePoint extends AbstractPoint implements Comparable<SitePoint>,
 		VoronoiPoint {
 
 	private Point2D position;
-
+	private boolean processed = false;
+	
 	/**
 	 * @param p
 	 */
@@ -98,5 +99,13 @@ public class SitePoint extends AbstractPoint implements Comparable<SitePoint>,
 
 	public String getType() {
 		return "site";
+	}
+
+	public boolean isProcessed() {
+		return processed;
+	}
+
+	public void setProcessed(boolean processed) {
+		this.processed = processed;
 	}
 }

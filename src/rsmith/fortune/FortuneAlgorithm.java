@@ -112,6 +112,7 @@ public class FortuneAlgorithm {
 			// get the corresponding breakpoints
 			bl = (before != null ? (BreakPoint) before.getPoint() : null);
 			br = (after != null ? (BreakPoint) after.getPoint() : null);
+			Arc arc = getFortuneData().findArcAbove(p);
 			assert (!(bl == null && br == null));
 			if (bl != null && br != null && bl.getRight() != br.getLeft()) {
 				// System.out.println("bl.getRight() == br.getLeft()  should hold");
@@ -158,6 +159,7 @@ public class FortuneAlgorithm {
 		}
 		verifyBeachline();
 
+		p.setProcessed(true);
 	}
 
 	private void fixCircleEvent(BreakPoint left, BreakPoint right) {
@@ -171,9 +173,7 @@ public class FortuneAlgorithm {
 
 	public void handleCircleEvent(CircleEvent ce) {
 		System.out.println("handleCircleEvent:y=" + fortuneData.getSweepY());
-		if (fortuneData.getSweepY() == -344.1638701725757) {
-			System.out.println("At sweepY = -344.1638701725757");
-		}
+		
 		// System.out.println("handleCircleEvent:y="+fortuneData.getSweepY()+"-----------------");
 		// the breakpoints representing the disappearing arc
 		BreakPoint leftBP = ce.getLeftBP();
