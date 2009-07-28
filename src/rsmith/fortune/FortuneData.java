@@ -20,6 +20,7 @@ public class FortuneData {
 	private NavigableSet<SitePoint> sites;
 	private Set<Point2D> points;
 	private double sweepY;
+	private SweepEvent currentEvent;
 
 	/**
 	 * @param p
@@ -227,5 +228,19 @@ public class FortuneData {
 				node.setCircleEvent(null);
 			}
 		}
+	}
+
+	/**
+	 * @return
+	 */
+	public SweepEvent getCurrentEvent() {
+		return currentEvent;
+	}
+
+	/**
+	 * @param currentEvent
+	 */
+	public void setCurrentEvent(SweepEvent currentEvent) {
+		this.currentEvent = currentEvent;
 	}
 }

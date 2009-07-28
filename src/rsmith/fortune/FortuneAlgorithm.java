@@ -34,6 +34,7 @@ public class FortuneAlgorithm {
 			SweepEvent e = (SweepEvent) getFortuneData().getEventQueue()
 					.remove();
 			getFortuneData().setSweepY(e.getEventY());
+			getFortuneData().setCurrentEvent(e);
 			if (e instanceof SiteEvent) {
 				handleSiteEvent((SiteEvent) e);
 			} else {

@@ -126,7 +126,7 @@ public class FortunePlotter extends Thread {
 		Graphics g = panel.getGraphics();
 		Point2D q = cmap.map(p);
 		g.setColor(c);
-		g.fillOval((int) q.getX() - 2, (int) q.getY() - 2, 5, 5);
+		g.fillOval((int) q.getX() - 3, (int) q.getY() - 3, 6, 6);
 	}
 
 	public void drawLine(Point2D p1, Point2D p2) {
@@ -158,29 +158,16 @@ public class FortunePlotter extends Thread {
 		drawLine(xval, yfrom, xval, yto);
 	}
 	
-	public void drawCircle(Point2D p, double r, Color c) {
-		Graphics g = panel.getGraphics();
-		Point2D q = cmap.map(p);
-		double  s = cmap.mapx(r);
-		g.setColor(c);
-		g.drawOval((int)q.getX(),(int)q.getY(),(int)s,(int)s);
-	}
-	
-	public void drawCircle(Point2D p, double r) {
-		drawCircle(p,r,Color.BLACK);
-	}
-	
-	public void drawCircle(double x, double y, double r, Color c) {
-		drawCircle(new Point2D.Double(x,y),r,c);
-	}
-		
-	public void drawCircle(double x, double y, double r) {
-		drawCircle(new Point2D.Double(x,y),r,Color.BLACK);
-	}
-	
 	public void drawCircleAtCenter(Point2D p, double r, Color c) {
-		Point2D q = new Point2D.Double(p.getX()-r,p.getX()+r);
-		drawCircle(q,r,c);
+		Point2D q = cmap.map(p);
+		double  s = cmap.maplength(r);
+		int w = (int)(2*s);
+		int h = (int)(2*s);
+		int x = (int)q.getX()-w/2;
+		int y = (int)q.getY()-w/2;
+		Graphics g = panel.getGraphics();
+		g.setColor(c);
+		g.drawOval(x,y,w,h);
 	}
 	
 	public void drawQuadratic(Quadratic q, double fromX, double toX) {
@@ -198,7 +185,7 @@ public class FortunePlotter extends Thread {
 	}
 
 	public void drawBreakPoint(BreakPoint b) {
-		Color bc =(b.getNode().getCircleEvent() == null ? Color.RED : Color.BLUE);
+		Color bc =(b.getNode().getCircleEvent() == null ? Color.RED : Color.GREEN);
 		drawPoint2D(b.getPosition(),bc);
 		if (b.hasSiteAtSweep() && b.getNext() != null
 				&& b.getNext().hasSiteAtSweep()) {
@@ -232,8 +219,6 @@ public class FortunePlotter extends Thread {
 	public void drawBeachline() {
 		Iterator<VoronoiNode> iter = fortune.getFortuneData().getBeachline()
 				.iterator();
-		panel.getGraphics()
-				.clearRect(0, 0, panel.getWidth(), panel.getHeight());
 		double sweep = getFortune().getFortuneData().getSweepY();
 		drawHorizontalLine(sweep);
 		while (iter.hasNext()) {
@@ -253,12 +238,14 @@ public class FortunePlotter extends Thread {
 		}
 	}
 	
-	public void drawNextEvent() {
+	public void drawCurrentEvent() {
 		SweepEvent e = fortune.getFortuneData().getEventQueue().peek();
-		if(e instanceof CircleEvent) {
-			drawCircleEvent((CircleEvent)e);
-		} else {
-			drawSiteEvent((SiteEvent)e);
+		if(e != null) {
+			if(e instanceof CircleEvent) {
+				drawCircleEvent((CircleEvent)e);
+			} else {
+				drawSiteEvent((SiteEvent)e);
+			}
 		}
 	}
 
@@ -269,13 +256,18 @@ public class FortunePlotter extends Thread {
 	private void drawCircleEvent(CircleEvent e) {
 		drawCircleAtCenter(e.getCenter(),e.getRadius(),Color.CYAN);
 		drawPoint2D(e.getCenter(),Color.ORANGE);
+		drawPoint2D(e.getPi().getPosition(), Color.WHITE);
+		drawPoint2D(e.getPj().getPosition(), Color.WHITE);
+		drawPoint2D(e.getPk().getPosition(), Color.WHITE);
 	}
 
 	public void draw() {
 		fortune.step();
+		panel.getGraphics()
+		.clearRect(0, 0, panel.getWidth(), panel.getHeight());
 		drawBeachline();
 		drawSites();
-		drawNextEvent();
+		drawCurrentEvent();
 	}
 
 	public void run() {
