@@ -175,7 +175,7 @@ public class FortuneAlgorithm {
 		SitePoint left = leftBP.getLeft();
 		SitePoint right = rightBP.getRight();
 
-		double eps = 0.0005;
+		double eps = 0.000005;
 		double delta = leftBP.getPosition().distance(rightBP.getPosition());
 		if (delta < eps) {
 			// effectively remove this arc

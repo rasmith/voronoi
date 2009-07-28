@@ -101,7 +101,7 @@ public class FortunePlotter extends Thread {
 
 		points = new HashSet<Point2D>();
 
-		for (int i = 0; i < 5; i++) {
+		for (int i = 0; i < 100; i++) {
 			//Point2D p = testPoints[i];
 			Point2D p = new
 			 Point2D.Double(NumberUtils.randomNumber(w/4,3*w/4),
@@ -277,7 +277,7 @@ public class FortunePlotter extends Thread {
 					init();
 				} else {
 					draw();
-					sleep(500);
+					sleep(50);
 				}
 			}
 			Rectangle2D box = AbstractPoint.getBoundingBox();
