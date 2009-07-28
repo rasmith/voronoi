@@ -22,7 +22,7 @@ class FortunePanel extends JPanel {
 	}
 
 	public Dimension getPreferredSize() {
-		return new Dimension(800, 600);
+		return new Dimension(800, 800);
 	}
 
 	public void repaint() {
