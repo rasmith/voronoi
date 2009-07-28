@@ -131,11 +131,10 @@ public class FortuneAlgorithm {
 				br = arc.getRight();
 				q = arc.getSite();
 			}
-
-			// we should have q at this point
-			assert (q != null);
-			if (q == null) {
-				System.out.println("q was null");
+			
+			// if bl has a circle event, then its a false alarm, so must be removed
+			if(bl != null && bl.getNode().getCircleEvent() != null) {
+				fortuneData.getEventQueue().remove( bl.getNode().getCircleEvent() );
 			}
 
 			// create the two new breakpoints that will intersect this arc
@@ -147,23 +146,12 @@ public class FortuneAlgorithm {
 
 			verifyBeachline();
 
-			fixCircleEvent(bl, br);
-
 			if (beachline.size() > 2) {
 				fortuneData.insertCircleEvents(vb1, vb2);
 			}
 			verifyBeachline();
 		}
 		p.setProcessed(true);
-	}
-
-	private void fixCircleEvent(BreakPoint left, BreakPoint right) {
-		if (left != null && right != null) {
-			VoronoiNode node = left.getNode();
-			CircleEvent event = node.getCircleEvent();
-			node.setCircleEvent(null);
-			fortuneData.getEventQueue().remove(event);
-		}
 	}
 
 	public void handleCircleEvent(CircleEvent ce) {

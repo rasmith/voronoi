@@ -171,7 +171,8 @@ public class FortunePlotter extends Thread {
 	}
 
 	public void drawBreakPoint(BreakPoint b) {
-		drawPoint2D(b.getPosition());
+		Color bc = new Color(b.getNode().getCircleEvent() == null ? 0xFF0000 : 0x00FF00);
+		drawPoint2D(b.getPosition(),bc);
 		if (b.hasSiteAtSweep() && b.getNext() != null
 				&& b.getNext().hasSiteAtSweep()) {
 			drawVerticalLine(b.getPosition().getX(), this.getFortune()
