@@ -19,9 +19,9 @@ public class CoordinateMap {
 	private void init() {
 		xmap = createSegmentMap(sourceRect.getX(), sourceRect.getX()
 				+ sourceRect.getWidth(), destRect.getX() + destRect.getWidth(),
-				destRect.getX() );
+				destRect.getX());
 		ymap = createSegmentMap(sourceRect.getY(), sourceRect.getY()
-				- sourceRect.getHeight(),  destRect.getY(), destRect.getY()
+				- sourceRect.getHeight(), destRect.getY(), destRect.getY()
 				+ destRect.getHeight());
 	}
 

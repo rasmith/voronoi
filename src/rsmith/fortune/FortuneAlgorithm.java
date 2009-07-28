@@ -62,20 +62,24 @@ public class FortuneAlgorithm {
 				BreakPoint bpn = bp.getNext();
 				if (bpn != null
 						&& bpn.getPosition().getX() < bp.getPosition().getX()) {
-					// System.out.println("Found breakpoints out of order (bp,bpn):"+bp.getPosition()+","+bpn.getPosition());
+					// System.out.println("Found breakpoints out of order
+					// (bp,bpn):"+bp.getPosition()+","+bpn.getPosition());
 				}
 				if (bpn != null && bp.getRight() != bpn.getLeft()) {
-					// System.out.println("bp.getRight() == bpn.getLeft() should hold at all times");
+					// System.out.println("bp.getRight() == bpn.getLeft() should
+					// hold at all times");
 				}
 				BreakPoint bpp = bp.getPrevious();
 				if (bpp != null
 						&& bpp.getPosition().getX() > bp.getPosition().getX()) {
-					// System.out.println("Found breakpoints out of order (bp,bpp)"+
+					// System.out.println("Found breakpoints out of order
+					// (bp,bpp)"+
 					// bp.getPosition() + "," + bpp.getPosition());
 				}
 			} else {
 				if (data.getBeachline().size() > 1) {
-					// System.out.println("Found a site point when should not have.");
+					// System.out.println("Found a site point when should not
+					// have.");
 				}
 			}
 
@@ -85,13 +89,17 @@ public class FortuneAlgorithm {
 		while (piter.hasNext()) {
 			SitePoint p = piter.next();
 			Point2D pos = p.getPosition();
-			if (p.isProcessed()  && pos.getY()  != data.getSweepY()) {
+			if (p.isProcessed() && pos.getY() != data.getSweepY()) {
 				Arc a = data.findArcAbove(p);
 				SitePoint q = a.getSite();
-				Quadratic f = q.createQuadratic(this.getFortuneData().getSweepY());
+				Quadratic f = q.createQuadratic(this.getFortuneData()
+						.getSweepY());
 				double yval = f.eval(pos.getX());
-				if(yval > pos.getY()) {
-					System.out.println("Processed point,p=("+pos.getX()+","+pos.getY()+"), should be behind beachline, ybeach="+yval+".");
+				if (yval > pos.getY()) {
+					System.out.println("Processed point,p=(" + pos.getX() + ","
+							+ pos.getY()
+							+ "), should be behind beachline, ybeach=" + yval
+							+ ".");
 				}
 			}
 

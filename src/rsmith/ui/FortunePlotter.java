@@ -52,7 +52,7 @@ public class FortunePlotter extends Thread {
 		 * Point2D.Double(280.1723056750386,125.31368823793328), new
 		 * Point2D.Double(141.66704014556166,130.00460088413675), new
 		 * Point2D.Double(160.20875408755992,201.71569526342256)};
-		 **/
+		 */
 
 		/**
 		 * Point2D.Double [] testPoints = { new
@@ -66,9 +66,9 @@ public class FortunePlotter extends Thread {
 		 * Point2D.Double(128.31076682011366,116.85176995793893), new
 		 * Point2D.Double(178.5950932404774,168.49640907388522), new
 		 * Point2D.Double(118.54249622085746,183.45825202723847) };
-		 **/
+		 */
 
-		/**
+		/***********************************************************************
 		 * Point2D.Double[] testPoints = {
 		 * 
 		 * new Point2D.Double(147.0732584314681, 173.80750919307016), new
@@ -81,7 +81,7 @@ public class FortunePlotter extends Thread {
 		 * Point2D.Double(103.41700707279446, 116.56491337735835), new
 		 * Point2D.Double(120.59588768125184, 119.62844811685294), new
 		 * Point2D.Double(231.05151947085594, 295.2391255003456) };
-		 ***/
+		 **********************************************************************/
 
 		Point2D.Double[] testPoints = {
 				new Point2D.Double(225.07572734218084, 373.3250018589953),
@@ -92,7 +92,7 @@ public class FortunePlotter extends Thread {
 		int w = panel.getWidth();
 		int h = panel.getHeight();
 
-		cmap = new CoordinateMap(new Rectangle2D.Double(0,800,1000,1000),
+		cmap = new CoordinateMap(new Rectangle2D.Double(0, 800, 1000, 1000),
 				new Rectangle2D.Double(0, 0, w, h));
 
 		points = new HashSet<Point2D>();
@@ -102,7 +102,8 @@ public class FortunePlotter extends Thread {
 			// Point2D p = new
 			// Point2D.Double(NumberUtils.randomNumber(w/4,3*w/4),
 			// NumberUtils.randomNumber(h/4, 3*h/4));
-			// System.out.print("new Point2D.Double("+p.getX()+","+p.getY()+"),");
+			// System.out.print("new
+			// Point2D.Double("+p.getX()+","+p.getY()+"),");
 			points.add(p);
 		}
 		fortune = new FortuneAlgorithm(points);
@@ -146,8 +147,9 @@ public class FortunePlotter extends Thread {
 	}
 
 	public void drawHorizontalLine(double value) {
-		drawLine(	cmap.getSourceRect().getX(),value,
-					cmap.getSourceRect().getX() + cmap.getSourceRect().getWidth(), value);
+		drawLine(cmap.getSourceRect().getX(), value, cmap.getSourceRect()
+				.getX()
+				+ cmap.getSourceRect().getWidth(), value);
 	}
 
 	public void drawVerticalLine(double xval, double yfrom, double yto) {
@@ -195,7 +197,8 @@ public class FortunePlotter extends Thread {
 	}
 
 	public void drawSitePoint(SitePoint s) {
-		drawPoint2D(s.getPosition(), (s.isProcessed() ? new Color(0xFF00FF) : new Color(0x0000FF)) );
+		drawPoint2D(s.getPosition(), (s.isProcessed() ? new Color(0xFF00FF)
+				: new Color(0x0000FF)));
 	}
 
 	public void drawBeachline() {
@@ -239,7 +242,9 @@ public class FortunePlotter extends Thread {
 				}
 			}
 			Rectangle2D box = AbstractPoint.getBoundingBox();
-			System.out.println("Bounding box: (x,y,w,h)=("+box.getX()+","+box.getY()+","+box.getWidth()+","+box.getHeight()+")");
+			System.out.println("Bounding box: (x,y,w,h)=(" + box.getX() + ","
+					+ box.getY() + "," + box.getWidth() + "," + box.getHeight()
+					+ ")");
 		} catch (InterruptedException e) {
 		}
 	}
