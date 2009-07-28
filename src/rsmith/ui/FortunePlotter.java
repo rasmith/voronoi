@@ -86,12 +86,13 @@ public class FortunePlotter extends Thread {
 		 * Point2D.Double(231.05151947085594, 295.2391255003456) };
 		 **********************************************************************/
 
-		Point2D.Double[] testPoints = {
+		/**Point2D.Double[] testPoints = {
 				new Point2D.Double(225.07572734218084, 373.3250018589953),
 				new Point2D.Double(453.6545808366297, 354.2050780216746),
 				new Point2D.Double(261.260290385394, 343.2367065919145),
 				new Point2D.Double(348.1461860932294, 231.67015557305558),
 				new Point2D.Double(434.84505860429806, 205.36575235215395) };
+		**/
 		int w = panel.getWidth();
 		int h = panel.getHeight();
 
@@ -101,12 +102,11 @@ public class FortunePlotter extends Thread {
 		points = new HashSet<Point2D>();
 
 		for (int i = 0; i < 5; i++) {
-			Point2D p = testPoints[i];
-			// Point2D p = new
-			// Point2D.Double(NumberUtils.randomNumber(w/4,3*w/4),
-			// NumberUtils.randomNumber(h/4, 3*h/4));
-			// System.out.print("new
-			// Point2D.Double("+p.getX()+","+p.getY()+"),");
+			//Point2D p = testPoints[i];
+			Point2D p = new
+			 Point2D.Double(NumberUtils.randomNumber(w/4,3*w/4),
+			 NumberUtils.randomNumber(h/4, 3*h/4));
+			System.out.print("new Point2D.Double("+p.getX()+","+p.getY()+"),");
 			points.add(p);
 		}
 		fortune = new FortuneAlgorithm(points);

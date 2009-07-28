@@ -52,7 +52,7 @@ public class CircleEvent extends AbstractSweepEvent implements SweepEvent {
 				.getPosition());
 		if (center != null) {
 			double radius = center.distance(pi.getPosition());
-			if (center.getY() - radius <= sweep) {
+			if (center.getY() - radius < sweep) {
 				result = new CircleEvent(center, radius, pi, pj, pk);
 			}
 		}

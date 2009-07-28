@@ -132,10 +132,12 @@ public class FortuneAlgorithm {
 				br = arc.getRight();
 				q = arc.getSite();
 			}
-			
-			// if bl has a circle event, then its a false alarm, so must be removed
-			if(bl != null && bl.getNode().getCircleEvent() != null) {
-				fortuneData.getEventQueue().remove( bl.getNode().getCircleEvent() );
+
+			// if bl has a circle event, then its a false alarm, so must be
+			// removed
+			if (bl != null && bl.getNode().getCircleEvent() != null) {
+				fortuneData.getEventQueue().remove(
+						bl.getNode().getCircleEvent());
 			}
 
 			// create the two new breakpoints that will intersect this arc
@@ -173,22 +175,27 @@ public class FortuneAlgorithm {
 		SitePoint left = leftBP.getLeft();
 		SitePoint right = rightBP.getRight();
 
-		// effectively remove this arc
-		fortuneData.removeBreakPoint(leftBP);
-		fortuneData.removeBreakPoint(rightBP);
+		double eps = 0.0005;
+		double delta = leftBP.getPosition().distance(rightBP.getPosition());
+		if (delta < eps) {
+			// effectively remove this arc
+			fortuneData.removeBreakPoint(leftBP);
+			fortuneData.removeBreakPoint(rightBP);
 
-		// check to see if the current arc has any other current circle events
-		// and remove those
-		fortuneData.clearCircleEvent(previous);
-		fortuneData.clearCircleEvent(rightBP);
+			// check to see if the current arc has any other current circle
+			// events
+			// and remove those
+			fortuneData.clearCircleEvent(previous);
+			fortuneData.clearCircleEvent(rightBP);
 
-		BreakPoint b = new BreakPoint();
-		fortuneData.insertBreakPoint(b, previous, next, left, right);
-		// insert the two new circle events
-		fortuneData.insertCircleEvent(previous, b);
-		fortuneData.insertCircleEvent(b, next);
+			BreakPoint b = new BreakPoint();
+			fortuneData.insertBreakPoint(b, previous, next, left, right);
+			// insert the two new circle events
+			fortuneData.insertCircleEvent(previous, b);
+			fortuneData.insertCircleEvent(b, next);
 
-		verifyBeachline();
+			verifyBeachline();
+		}
 		// System.out.println("-------------------------------");
 	}
 
