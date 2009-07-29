@@ -1,8 +1,12 @@
 package rsmith.fortune;
 
 import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.util.ArrayList;
+import java.util.Deque;
 import java.util.NavigableSet;
 import java.util.PriorityQueue;
+import java.util.ArrayDeque;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -23,9 +27,11 @@ public class FortuneData {
 	private NavigableSet<SitePoint> sites;
 	private Set<Point2D> points;
 	private DCEL edgeList;
+	private Deque<BreakPoint> danglingEdges;
 	private double sweepY;
 	private SweepEvent currentEvent;
-
+	private Rectangle2D boundingBox;
+	
 	/**
 	 * @param p
 	 */
@@ -38,6 +44,7 @@ public class FortuneData {
 		beachline = new TreeSet<VoronoiNode>();
 		sites = new TreeSet<SitePoint>();
 		edgeList = new DCEL();
+		danglingEdges = new ArrayDeque<BreakPoint>();
 	}
 
 	/**
@@ -280,27 +287,37 @@ public class FortuneData {
 	
 		updateEdge(left,v);
 		updateEdge(right,v);
-		updateEdge(b,v);
+		insertHalfEdge(b,v);
+	}
 	
+	protected void insertHalfEdge(BreakPoint b) {
+		HalfEdge edge = new HalfEdge();
+		b.setEdge(edge);
+		edgeList.getEdges().add(edge);
+	}
+	
+	protected void insertHalfEdge(BreakPoint b, Vertex  v) {
+		this.insertHalfEdge(b);
+		b.getEdge().setOrigin(v);
 	}
 	
 	protected void updateEdge(BreakPoint b, Vertex v) {
 		HalfEdge edge = null;
-		if(b.getEdge() == null) {
-			edge = new HalfEdge();
-			b.setEdge(edge);
-			edgeList.getEdges().add(edge);
-		} else {
-			edge = b.getEdge();
+		edge = b.getEdge();
+		HalfEdge twin = new HalfEdge();
+		twin.setOrigin(v);
+		edge.setTwin(twin);
+		twin.setTwin(edge);
+		if(edge.getOrigin() == null) {
+			danglingEdges.addLast(b);
 		}
-		if(edge.getOrigin()==null) {
-			edge.setOrigin(v);
-		} else {
-			HalfEdge twin = new HalfEdge();
-			twin.setOrigin(v);
-			edge.setTwin(twin);
-			twin.setTwin(edge);
-			edgeList.getEdges().add(twin);
-		}
+	}
+
+	public Rectangle2D getBoundingBox() {
+		return boundingBox;
+	}
+
+	public void setBoundingBox(Rectangle2D boundingBox) {
+		this.boundingBox = boundingBox;
 	}
 }
