@@ -175,9 +175,9 @@ public class FortuneAlgorithm {
 		SitePoint left = leftBP.getLeft();
 		SitePoint right = rightBP.getRight();
 
-		double eps = 0.000005;
+		double eps = 1E-6;
 		double delta = leftBP.getPosition().distance(rightBP.getPosition());
-		if (delta < eps) {
+		if (delta < eps) {			
 			// effectively remove this arc
 			fortuneData.removeBreakPoint(leftBP);
 			fortuneData.removeBreakPoint(rightBP);
@@ -193,8 +193,14 @@ public class FortuneAlgorithm {
 			// insert the two new circle events
 			fortuneData.insertCircleEvent(previous, b);
 			fortuneData.insertCircleEvent(b, next);
-
+			
+			// update the DCEL
+			fortuneData.updateEdgeList(ce,b);
+			
 			verifyBeachline();
+		} else {
+			System.out.println("leftBP=" + leftBP + ",rightBP=" + rightBP
+					+ ",eps=" + eps + ",delta=" + delta);
 		}
 		// System.out.println("-------------------------------");
 	}

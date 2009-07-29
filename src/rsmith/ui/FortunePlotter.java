@@ -10,6 +10,7 @@ import java.util.Iterator;
 
 import javax.swing.JPanel;
 
+import rsmith.dcel.HalfEdge;
 import rsmith.fortune.FortuneAlgorithm;
 import rsmith.fortune.VoronoiNode;
 import rsmith.fortune.event.CircleEvent;
@@ -102,7 +103,7 @@ public class FortunePlotter extends Thread {
 
 		points = new HashSet<Point2D>();
 
-		for (int i = 0; i < 100; i++) {
+		for (int i = 0; i < 10; i++) {
 			// Point2D p = testPoints[i];
 			Point2D p = new Point2D.Double(NumberUtils.randomNumber(w / 4,
 					3 * w / 4), NumberUtils.randomNumber(h / 4, 3 * h / 4));
@@ -231,6 +232,17 @@ public class FortunePlotter extends Thread {
 			}
 		}
 	}
+	
+	public void drawHalfEdges() {
+		Iterator<HalfEdge> iter = this.getFortune().getFortuneData().getEdgeList().getEdges().iterator();
+		while(iter.hasNext()) {
+			HalfEdge edge = iter.next();
+			if(edge.getTwin() != null) {
+				drawLine(edge.getTwin().getOrigin().getPosition(),edge.getOrigin().getPosition());
+			}
+		}
+		
+	}
 
 	public void drawSites() {
 		Set<SitePoint> points = this.fortune.getFortuneData().getSites();
@@ -263,13 +275,18 @@ public class FortunePlotter extends Thread {
 		drawPoint2D(e.getPk().getPosition(), Color.WHITE);
 	}
 
+	private boolean drawUI = true;
+	private int sleepTime = 200;
+
 	public void draw() {
 		fortune.step();
-		panel.getGraphics()
-				.clearRect(0, 0, panel.getWidth(), panel.getHeight());
-		drawBeachline();
-		drawSites();
-		drawCurrentEvent();
+		if (drawUI) {
+			panel.getGraphics().clearRect(0, 0, panel.getWidth(),
+					panel.getHeight());
+			drawBeachline();
+			drawSites();
+			drawCurrentEvent();
+		}
 	}
 
 	public void run() {
@@ -279,15 +296,22 @@ public class FortunePlotter extends Thread {
 					init();
 				} else {
 					draw();
-					sleep(50);
+					if (drawUI) {
+						sleep(sleepTime);
+					}
 				}
 			}
 			Rectangle2D box = AbstractPoint.getBoundingBox();
 			System.out.println("Bounding box: (x,y,w,h)=(" + box.getX() + ","
 					+ box.getY() + "," + box.getWidth() + "," + box.getHeight()
 					+ ")");
+			System.out.println("beachline="
+					+ fortune.getFortuneData().getBeachline());
+			System.out.println("eventq="
+					+ fortune.getFortuneData().getEventQueue());
 		} catch (InterruptedException e) {
 		}
+		drawHalfEdges();
 	}
 
 	/**

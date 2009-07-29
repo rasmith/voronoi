@@ -6,6 +6,9 @@ import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.TreeSet;
 
+import rsmith.dcel.DCEL;
+import rsmith.dcel.HalfEdge;
+import rsmith.dcel.Vertex;
 import rsmith.fortune.event.CircleEvent;
 import rsmith.fortune.event.SiteEvent;
 import rsmith.fortune.event.SweepEvent;
@@ -19,6 +22,7 @@ public class FortuneData {
 	private NavigableSet<VoronoiNode> beachline;
 	private NavigableSet<SitePoint> sites;
 	private Set<Point2D> points;
+	private DCEL edgeList;
 	private double sweepY;
 	private SweepEvent currentEvent;
 
@@ -33,6 +37,7 @@ public class FortuneData {
 		eventQueue = new PriorityQueue<SweepEvent>(new TreeSet<SweepEvent>());
 		beachline = new TreeSet<VoronoiNode>();
 		sites = new TreeSet<SitePoint>();
+		edgeList = new DCEL();
 	}
 
 	/**
@@ -208,6 +213,7 @@ public class FortuneData {
 
 		CircleEvent c = CircleEvent.createCircleEvent(sweepY, left.getLeft(),
 				left.getRight(), right.getRight());
+
 		if (c != null) {
 			c.setLeftBP(left);
 			c.setRightBP(right);
@@ -242,5 +248,59 @@ public class FortuneData {
 	 */
 	public void setCurrentEvent(SweepEvent currentEvent) {
 		this.currentEvent = currentEvent;
+	}
+
+	/**
+	 * @return
+	 */
+	public DCEL getEdgeList() {
+		return edgeList;
+	}
+
+	/**
+	 * @param edgeList
+	 */
+	public void setEdgeList(DCEL edgeList) {
+		this.edgeList = edgeList;
+	}
+	
+	/**
+	 * 
+	 * @param e
+	 * @return
+	 */
+	public void updateEdgeList(CircleEvent e, BreakPoint b) {
+
+		BreakPoint left = e.getLeftBP();
+		BreakPoint right = e.getRightBP();
+		Vertex v = new Vertex();
+		// updating the edgeList at a breakpoint
+		Point2D pos = e.getLeftBP().getPosition();
+		v.setPosition(pos);
+	
+		updateEdge(left,v);
+		updateEdge(right,v);
+		updateEdge(b,v);
+	
+	}
+	
+	protected void updateEdge(BreakPoint b, Vertex v) {
+		HalfEdge edge = null;
+		if(b.getEdge() == null) {
+			edge = new HalfEdge();
+			b.setEdge(edge);
+			edgeList.getEdges().add(edge);
+		} else {
+			edge = b.getEdge();
+		}
+		if(edge.getOrigin()==null) {
+			edge.setOrigin(v);
+		} else {
+			HalfEdge twin = new HalfEdge();
+			twin.setOrigin(v);
+			edge.setTwin(twin);
+			twin.setTwin(edge);
+			edgeList.getEdges().add(twin);
+		}
 	}
 }

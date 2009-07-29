@@ -2,6 +2,7 @@ package rsmith.fortune.point;
 
 import java.awt.geom.Point2D;
 
+import rsmith.dcel.HalfEdge;
 import rsmith.geom.Line;
 import rsmith.geom.Quadratic;
 import rsmith.util.PointUtils;
@@ -17,6 +18,7 @@ public class BreakPoint extends AbstractPoint implements
 	private BreakPoint next;
 	private SitePoint left;
 	private SitePoint right;
+	private HalfEdge edge;
 	private Point2D position = null;
 	private double lastSweepY;
 
@@ -235,8 +237,25 @@ public class BreakPoint extends AbstractPoint implements
 		return true;
 	}
 
+	/* (non-Javadoc)
+	 * @see rsmith.fortune.point.VoronoiPoint#getType()
+	 */
 	public String getType() {
 		return "breakpoint";
+	}
+
+	/**
+	 * @return
+	 */
+	public HalfEdge getEdge() {
+		return edge;
+	}
+
+	/**
+	 * @param edge
+	 */
+	public void setEdge(HalfEdge edge) {
+		this.edge = edge;
 	}
 
 }
