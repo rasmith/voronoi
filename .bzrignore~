@@ -1,0 +1,14 @@
+*.class
+*.preferences.*
+.classpath
+.project
+.settings*
+.project
+bin
+.settings.moved
+bin
+bin
+bin
+.gitignore
+.git
+*~
