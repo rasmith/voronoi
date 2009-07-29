@@ -86,13 +86,14 @@ public class FortunePlotter extends Thread {
 		 * Point2D.Double(231.05151947085594, 295.2391255003456) };
 		 **********************************************************************/
 
-		/**Point2D.Double[] testPoints = {
-				new Point2D.Double(225.07572734218084, 373.3250018589953),
-				new Point2D.Double(453.6545808366297, 354.2050780216746),
-				new Point2D.Double(261.260290385394, 343.2367065919145),
-				new Point2D.Double(348.1461860932294, 231.67015557305558),
-				new Point2D.Double(434.84505860429806, 205.36575235215395) };
-		**/
+		/**
+		 * Point2D.Double[] testPoints = { new
+		 * Point2D.Double(225.07572734218084, 373.3250018589953), new
+		 * Point2D.Double(453.6545808366297, 354.2050780216746), new
+		 * Point2D.Double(261.260290385394, 343.2367065919145), new
+		 * Point2D.Double(348.1461860932294, 231.67015557305558), new
+		 * Point2D.Double(434.84505860429806, 205.36575235215395) };
+		 */
 		int w = panel.getWidth();
 		int h = panel.getHeight();
 
@@ -102,11 +103,11 @@ public class FortunePlotter extends Thread {
 		points = new HashSet<Point2D>();
 
 		for (int i = 0; i < 100; i++) {
-			//Point2D p = testPoints[i];
-			Point2D p = new
-			 Point2D.Double(NumberUtils.randomNumber(w/4,3*w/4),
-			 NumberUtils.randomNumber(h/4, 3*h/4));
-			System.out.print("new Point2D.Double("+p.getX()+","+p.getY()+"),");
+			// Point2D p = testPoints[i];
+			Point2D p = new Point2D.Double(NumberUtils.randomNumber(w / 4,
+					3 * w / 4), NumberUtils.randomNumber(h / 4, 3 * h / 4));
+			System.out.print("new Point2D.Double(" + p.getX() + "," + p.getY()
+					+ "),");
 			points.add(p);
 		}
 		fortune = new FortuneAlgorithm(points);
@@ -157,19 +158,19 @@ public class FortunePlotter extends Thread {
 	public void drawVerticalLine(double xval, double yfrom, double yto) {
 		drawLine(xval, yfrom, xval, yto);
 	}
-	
+
 	public void drawCircleAtCenter(Point2D p, double r, Color c) {
 		Point2D q = cmap.map(p);
-		double  s = cmap.maplength(r);
-		int w = (int)(2*s);
-		int h = (int)(2*s);
-		int x = (int)q.getX()-w/2;
-		int y = (int)q.getY()-w/2;
+		double s = cmap.maplength(r);
+		int w = (int) (2 * s);
+		int h = (int) (2 * s);
+		int x = (int) q.getX() - w / 2;
+		int y = (int) q.getY() - w / 2;
 		Graphics g = panel.getGraphics();
 		g.setColor(c);
-		g.drawOval(x,y,w,h);
+		g.drawOval(x, y, w, h);
 	}
-	
+
 	public void drawQuadratic(Quadratic q, double fromX, double toX) {
 		double delta = 0.5;
 		for (double xval = fromX; xval <= toX - delta; xval = Math.min(xval
@@ -185,8 +186,9 @@ public class FortunePlotter extends Thread {
 	}
 
 	public void drawBreakPoint(BreakPoint b) {
-		Color bc =(b.getNode().getCircleEvent() == null ? Color.RED : Color.GREEN);
-		drawPoint2D(b.getPosition(),bc);
+		Color bc = (b.getNode().getCircleEvent() == null ? Color.RED
+				: Color.GREEN);
+		drawPoint2D(b.getPosition(), bc);
 		if (b.hasSiteAtSweep() && b.getNext() != null
 				&& b.getNext().hasSiteAtSweep()) {
 			drawVerticalLine(b.getPosition().getX(), this.getFortune()
@@ -237,25 +239,25 @@ public class FortunePlotter extends Thread {
 			drawSitePoint(iter.next());
 		}
 	}
-	
+
 	public void drawCurrentEvent() {
 		SweepEvent e = fortune.getFortuneData().getEventQueue().peek();
-		if(e != null) {
-			if(e instanceof CircleEvent) {
-				drawCircleEvent((CircleEvent)e);
+		if (e != null) {
+			if (e instanceof CircleEvent) {
+				drawCircleEvent((CircleEvent) e);
 			} else {
-				drawSiteEvent((SiteEvent)e);
+				drawSiteEvent((SiteEvent) e);
 			}
 		}
 	}
 
 	private void drawSiteEvent(SiteEvent e) {
-		drawPoint2D(e.getSite().getPosition(),Color.YELLOW);
+		drawPoint2D(e.getSite().getPosition(), Color.YELLOW);
 	}
-	
+
 	private void drawCircleEvent(CircleEvent e) {
-		drawCircleAtCenter(e.getCenter(),e.getRadius(),Color.CYAN);
-		drawPoint2D(e.getCenter(),Color.ORANGE);
+		drawCircleAtCenter(e.getCenter(), e.getRadius(), Color.CYAN);
+		drawPoint2D(e.getCenter(), Color.ORANGE);
 		drawPoint2D(e.getPi().getPosition(), Color.WHITE);
 		drawPoint2D(e.getPj().getPosition(), Color.WHITE);
 		drawPoint2D(e.getPk().getPosition(), Color.WHITE);
@@ -264,7 +266,7 @@ public class FortunePlotter extends Thread {
 	public void draw() {
 		fortune.step();
 		panel.getGraphics()
-		.clearRect(0, 0, panel.getWidth(), panel.getHeight());
+				.clearRect(0, 0, panel.getWidth(), panel.getHeight());
 		drawBeachline();
 		drawSites();
 		drawCurrentEvent();

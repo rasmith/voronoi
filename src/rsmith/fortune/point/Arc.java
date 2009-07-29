@@ -26,7 +26,8 @@ public class Arc {
 	}
 
 	public SitePoint getSite() {
-		SitePoint result = ( left != null ? left.getRight() : ( right != null ? right.getLeft() : null ) );
+		SitePoint result = (left != null ? left.getRight()
+				: (right != null ? right.getLeft() : null));
 		return result;
 	}
 }

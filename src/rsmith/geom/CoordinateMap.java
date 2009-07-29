@@ -38,10 +38,10 @@ public class CoordinateMap {
 	public double mapy(double value) {
 		return ymap.eval(value);
 	}
-	
+
 	public double maplength(double value) {
-		Point2D o1 = new Point2D.Double(0,0);
-		Point2D p1 = new Point2D.Double(value,0);
+		Point2D o1 = new Point2D.Double(0, 0);
+		Point2D p1 = new Point2D.Double(value, 0);
 		Point2D o2 = map(o1);
 		Point2D p2 = map(p1);
 		return o2.distance(p2);
