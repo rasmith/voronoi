@@ -1,9 +1,0 @@
-*.class
-bin
-.bzr
-.bzrignore
-bzr_log.iqt1rb
-bzr_log.wcxubn
-.project
-.classpath
-.settings
