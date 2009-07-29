@@ -232,16 +232,18 @@ public class FortunePlotter extends Thread {
 			}
 		}
 	}
-	
+
 	public void drawHalfEdges() {
-		Iterator<HalfEdge> iter = this.getFortune().getFortuneData().getEdgeList().getEdges().iterator();
-		while(iter.hasNext()) {
+		Iterator<HalfEdge> iter = this.getFortune().getFortuneData()
+				.getEdgeList().getEdges().iterator();
+		while (iter.hasNext()) {
 			HalfEdge edge = iter.next();
-			if(edge.getTwin() != null) {
-				drawLine(edge.getTwin().getOrigin().getPosition(),edge.getOrigin().getPosition());
+			if (edge.getTwin() != null) {
+				drawLine(edge.getTwin().getOrigin().getPosition(), edge
+						.getOrigin().getPosition());
 			}
 		}
-		
+
 	}
 
 	public void drawSites() {

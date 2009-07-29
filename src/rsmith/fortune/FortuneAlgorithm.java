@@ -146,18 +146,18 @@ public class FortuneAlgorithm {
 
 			VoronoiNode vb1 = fortuneData.insertBreakPoint(b1, bl, b2, q, p);
 			VoronoiNode vb2 = fortuneData.insertBreakPoint(b2, b1, br, p, q);
-			
+
 			// insert half edges
 			fortuneData.insertHalfEdge(b1);
 			fortuneData.insertHalfEdge(b2);
 
 			verifyBeachline();
-			
+
 			// insert any circle events
 			if (beachline.size() > 2) {
 				fortuneData.insertCircleEvents(vb1, vb2);
 			}
-			
+
 			verifyBeachline();
 		}
 		p.setProcessed(true);
@@ -183,7 +183,7 @@ public class FortuneAlgorithm {
 
 		double eps = 1E-6;
 		double delta = leftBP.getPosition().distance(rightBP.getPosition());
-		if (delta < eps) {			
+		if (delta < eps) {
 			// effectively remove this arc
 			fortuneData.removeBreakPoint(leftBP);
 			fortuneData.removeBreakPoint(rightBP);
@@ -197,18 +197,18 @@ public class FortuneAlgorithm {
 			// insert new breakpoint to replace the two dissappearing ones
 			BreakPoint b = new BreakPoint();
 			fortuneData.insertBreakPoint(b, previous, next, left, right);
-			
+
 			// insert the two new circle events
 			fortuneData.insertCircleEvent(previous, b);
 			fortuneData.insertCircleEvent(b, next);
-			
+
 			// update the DCEL
-			fortuneData.updateEdgeList(ce,b);
-			
+			fortuneData.updateEdgeList(ce, b);
+
 			verifyBeachline();
 		} else {
-			//System.out.println("leftBP=" + leftBP + ",rightBP=" + rightBP
-			//		+ ",eps=" + eps + ",delta=" + delta);
+			// System.out.println("leftBP=" + leftBP + ",rightBP=" + rightBP
+			// + ",eps=" + eps + ",delta=" + delta);
 		}
 		// System.out.println("-------------------------------");
 	}

@@ -31,7 +31,7 @@ public class FortuneData {
 	private double sweepY;
 	private SweepEvent currentEvent;
 	private Rectangle2D boundingBox;
-	
+
 	/**
 	 * @param p
 	 */
@@ -270,7 +270,7 @@ public class FortuneData {
 	public void setEdgeList(DCEL edgeList) {
 		this.edgeList = edgeList;
 	}
-	
+
 	/**
 	 * 
 	 * @param e
@@ -284,23 +284,23 @@ public class FortuneData {
 		// updating the edgeList at a breakpoint
 		Point2D pos = e.getLeftBP().getPosition();
 		v.setPosition(pos);
-	
-		updateEdge(left,v);
-		updateEdge(right,v);
-		insertHalfEdge(b,v);
+
+		updateEdge(left, v);
+		updateEdge(right, v);
+		insertHalfEdge(b, v);
 	}
-	
+
 	protected void insertHalfEdge(BreakPoint b) {
 		HalfEdge edge = new HalfEdge();
 		b.setEdge(edge);
 		edgeList.getEdges().add(edge);
 	}
-	
-	protected void insertHalfEdge(BreakPoint b, Vertex  v) {
+
+	protected void insertHalfEdge(BreakPoint b, Vertex v) {
 		this.insertHalfEdge(b);
 		b.getEdge().setOrigin(v);
 	}
-	
+
 	protected void updateEdge(BreakPoint b, Vertex v) {
 		HalfEdge edge = null;
 		edge = b.getEdge();
@@ -308,7 +308,7 @@ public class FortuneData {
 		twin.setOrigin(v);
 		edge.setTwin(twin);
 		twin.setTwin(edge);
-		if(edge.getOrigin() == null) {
+		if (edge.getOrigin() == null) {
 			danglingEdges.addLast(b);
 		}
 	}

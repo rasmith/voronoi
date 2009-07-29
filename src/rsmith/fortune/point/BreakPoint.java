@@ -237,7 +237,9 @@ public class BreakPoint extends AbstractPoint implements
 		return true;
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see rsmith.fortune.point.VoronoiPoint#getType()
 	 */
 	public String getType() {
