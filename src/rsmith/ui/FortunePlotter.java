@@ -98,12 +98,13 @@ public class FortunePlotter extends Thread {
 		int w = panel.getWidth();
 		int h = panel.getHeight();
 
-		cmap = new CoordinateMap(new Rectangle2D.Double(0, 800, 1000, 1000),
-				new Rectangle2D.Double(0, 0, w, h));
+		Rectangle2D sourceRect = new Rectangle2D.Double(0, 800, 1000, 1000);
+		Rectangle2D destRect =new Rectangle2D.Double(0, 0, w, h);
+		cmap = new CoordinateMap(sourceRect,destRect);
 
 		points = new HashSet<Point2D>();
 
-		for (int i = 0; i < 10; i++) {
+		for (int i = 0; i < 3; i++) {
 			// Point2D p = testPoints[i];
 			Point2D p = new Point2D.Double(NumberUtils.randomNumber(w / 4,
 					3 * w / 4), NumberUtils.randomNumber(h / 4, 3 * h / 4));
@@ -113,6 +114,7 @@ public class FortunePlotter extends Thread {
 		}
 		fortune = new FortuneAlgorithm(points);
 		fortune.init();
+		fortune.getFortuneData().setBoundingBox(sourceRect);
 	}
 
 	public void clearGraphics() {

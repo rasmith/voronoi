@@ -20,6 +20,7 @@ public class BreakPoint extends AbstractPoint implements
 	private SitePoint right;
 	private HalfEdge edge;
 	private Point2D position = null;
+	private Line bisector = null;
 	private double lastSweepY;
 
 	/**
@@ -258,6 +259,17 @@ public class BreakPoint extends AbstractPoint implements
 	 */
 	public void setEdge(HalfEdge edge) {
 		this.edge = edge;
+	}
+
+	/**
+	 * 
+	 * @return
+	 */
+	public Line getBisector() {
+		if(bisector == null && left != null && right != null) {
+			bisector = Line.bisector(left.getPosition(), right.getPosition());
+		}
+		return bisector;
 	}
 
 }
