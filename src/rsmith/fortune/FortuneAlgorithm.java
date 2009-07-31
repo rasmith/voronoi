@@ -41,9 +41,6 @@ public class FortuneAlgorithm {
 				handleCircleEvent((CircleEvent) e);
 			}
 		} 
-		if(isFinished()) {
-			fortuneData.cleanup();
-		}
 	}
 
 	public boolean isFinished() {
@@ -150,10 +147,6 @@ public class FortuneAlgorithm {
 			VoronoiNode vb1 = fortuneData.insertBreakPoint(b1, bl, b2, q, p);
 			VoronoiNode vb2 = fortuneData.insertBreakPoint(b2, b1, br, p, q);
 
-			// insert half edges
-			fortuneData.insertHalfEdge(b1);
-			fortuneData.insertHalfEdge(b2);
-
 			verifyBeachline();
 
 			// insert any circle events
@@ -204,9 +197,6 @@ public class FortuneAlgorithm {
 			// insert the two new circle events
 			fortuneData.insertCircleEvent(previous, b);
 			fortuneData.insertCircleEvent(b, next);
-
-			// update the DCEL
-			fortuneData.updateEdgeList(ce, b);
 
 			verifyBeachline();
 		} else {

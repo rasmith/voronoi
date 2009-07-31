@@ -50,7 +50,7 @@ public class Line {
 		// y-value y always, then (x,y) is the intersection and since
 		// v.getB() returns x and eval(v.getB()) will return nv.getB()=y since
 		// nv.getM()=0, intersectVertical will return (x,y)
-		Point2D result = new Point2D.Double(v.getB(), eval(v.getB()));
+		Point2D result = new Point2D.Double(v.getB(), eval(nv.getB()));
 		return result;
 	}
 
