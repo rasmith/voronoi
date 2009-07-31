@@ -273,7 +273,6 @@ public class FortuneData {
 		this.edgeList = edgeList;
 	}
 
-	
 
 	public Rectangle2D getBoundingBox() {
 		return boundingBox;
@@ -282,8 +281,5 @@ public class FortuneData {
 	public void setBoundingBox(Rectangle2D boundingBox) {
 		this.boundingBox = boundingBox;
 	}
-
-	
-
 
 }
