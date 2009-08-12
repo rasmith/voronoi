@@ -100,7 +100,7 @@ public class FortuneAlgorithm {
 					System.out.println("Processed point,p=(" + pos.getX() + ","
 							+ pos.getY()
 							+ "), should be behind beachline, ybeach=" + yval
-							+ ".");
+							+ "."); 
 				}
 			}
 
