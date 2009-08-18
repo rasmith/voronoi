@@ -4,6 +4,7 @@ import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.Deque;
+import java.util.Iterator;
 import java.util.NavigableSet;
 import java.util.PriorityQueue;
 import java.util.ArrayDeque;
@@ -19,6 +20,7 @@ import rsmith.fortune.event.SweepEvent;
 import rsmith.fortune.point.Arc;
 import rsmith.fortune.point.BreakPoint;
 import rsmith.fortune.point.SitePoint;
+import rsmith.geom.Line;
 
 public class FortuneData {
 
@@ -273,6 +275,26 @@ public class FortuneData {
 
 	/**
 	 * 
+	 * @param b
+	 */
+	protected void insertHalfEdge(BreakPoint b) {
+		HalfEdge edge = new HalfEdge();
+		b.setEdge(edge);
+		edgeList.getEdges().add(edge);
+	}
+
+	/**
+	 * 
+	 * @param b
+	 * @param v
+	 */
+	protected void insertHalfEdge(BreakPoint b, Vertex v) {
+		this.insertHalfEdge(b);
+		b.getEdge().setOrigin(v);
+	}
+
+	/**
+	 * 
 	 * @param e
 	 * @return
 	 */
@@ -282,23 +304,12 @@ public class FortuneData {
 		BreakPoint right = e.getRightBP();
 		Vertex v = new Vertex();
 		// updating the edgeList at a breakpoint
-		Point2D pos = e.getLeftBP().getPosition();
+		Point2D pos = left.getPosition();
 		v.setPosition(pos);
 
 		updateEdge(left, v);
 		updateEdge(right, v);
 		insertHalfEdge(b, v);
-	}
-
-	protected void insertHalfEdge(BreakPoint b) {
-		HalfEdge edge = new HalfEdge();
-		b.setEdge(edge);
-		edgeList.getEdges().add(edge);
-	}
-
-	protected void insertHalfEdge(BreakPoint b, Vertex v) {
-		this.insertHalfEdge(b);
-		b.getEdge().setOrigin(v);
 	}
 
 	protected void updateEdge(BreakPoint b, Vertex v) {
@@ -320,4 +331,83 @@ public class FortuneData {
 	public void setBoundingBox(Rectangle2D boundingBox) {
 		this.boundingBox = boundingBox;
 	}
+
+	protected Point2D[] intersectBoundingBox(BreakPoint b) {
+		Point2D[] result = null;
+		Line top = new Line(0, boundingBox.getY());
+		Line bottom = new Line(0, boundingBox.getY() - boundingBox.getHeight());
+		Line left = new Line(Double.POSITIVE_INFINITY, boundingBox.getX());
+		Line right = new Line(Double.POSITIVE_INFINITY, boundingBox.getX()
+				+ boundingBox.getWidth());
+		Line bisector = b.getBisector();
+		Point2D[] ps = new Point2D.Double[4];
+		ps[0] = top.intersect(bisector);
+		ps[1] = bottom.intersect(bisector);
+		ps[2] = left.intersect(bisector);
+		ps[3] = right.intersect(bisector);
+		Point2D low = null;
+		Point2D high = null;
+		for (int i = 0; i < ps.length; i++) {
+			low = ((low != null && ps[i] != null && ps[i].getY() < low.getY())
+					|| low == null ? ps[i] : low);
+			high = ((high != null && ps[i] != null && ps[i].getY() > high
+					.getY())
+					|| high == null ? ps[i] : high);
+		}
+		result = new Point2D.Double[2];
+		result[0] = low;
+		result[1] = high;
+
+		if (low.getY() > high.getY()) {
+			System.out.println("low.y < high.y should hold");
+		}
+		return result;
+	}
+
+	public void fixHalfEdge(BreakPoint b) {
+		Point2D[] intersections = intersectBoundingBox(b);
+		HalfEdge e = b.getEdge();
+		HalfEdge t = e.getTwin();
+
+		if (e.getOrigin() == null && t.getOrigin() != null) {
+			Vertex v = new Vertex();
+			v.setPosition(intersections[1]);
+			v.setIncidentEdge(e);
+			e.setOrigin(v);
+		} else if (e.getOrigin() == null && t.getOrigin() == null) {
+			System.out.println("This edge should not have two null origins:b="
+					+ b);
+		} else if (e.getOrigin() != null && t.getOrigin() == null) {
+			Vertex v = new Vertex();
+			v.setPosition(intersections[0]);
+			v.setIncidentEdge(t);
+			t.setOrigin(v);
+		}
+	}
+
+	public void cleanup() {
+		Iterator<VoronoiNode> iter = beachline.iterator();
+		/**while (iter.hasNext()) {
+			BreakPoint b = (BreakPoint) iter.next().getPoint();
+			HalfEdge e = b.getEdge();
+			HalfEdge t = new HalfEdge();
+			if (e.getOrigin() == null) {
+				Vertex v = new Vertex();
+				v.setPosition(b.getPosition());
+				v.setIncidentEdge(e);
+				e.setOrigin(v);
+			}
+			e.setTwin(t);
+			t.setTwin(e);
+			danglingEdges.add(b);
+		}**/
+		fixHalfEdges();
+	}
+
+	public void fixHalfEdges() {
+		while (!danglingEdges.isEmpty()) {
+			fixHalfEdge(danglingEdges.remove());
+		}
+	}
+
 }

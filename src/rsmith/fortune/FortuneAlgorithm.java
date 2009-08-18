@@ -40,6 +40,9 @@ public class FortuneAlgorithm {
 			} else {
 				handleCircleEvent((CircleEvent) e);
 			}
+		} 
+		if(isFinished()) {
+			fortuneData.cleanup();
 		}
 	}
 
