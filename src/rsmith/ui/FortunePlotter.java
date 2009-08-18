@@ -104,7 +104,7 @@ public class FortunePlotter extends Thread {
 
 		points = new HashSet<Point2D>();
 
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < 10; i++) {
 			// Point2D p = testPoints[i];
 			Point2D p = new Point2D.Double(NumberUtils.randomNumber(w / 4,
 					3 * w / 4), NumberUtils.randomNumber(h / 4, 3 * h / 4));
