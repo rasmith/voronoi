@@ -2,6 +2,8 @@ package rsmith.geom;
 
 import java.awt.geom.Point2D;
 
+import rsmith.util.NumberUtils;
+
 public class Line {
 
 	private double m;
@@ -12,6 +14,27 @@ public class Line {
 		this.b = b;
 	}
 
+	public static Line create(Point2D p, Point2D q) {
+		Line result = null;
+		double m,b;
+		double diffy = q.getY() - p.getY();
+		double diffx = q.getX() - p.getX();
+		if( p.distance(q) == 0 ) {
+			if(diffx == 0) {
+				m = Double.POSITIVE_INFINITY;
+				b = (q.getX() + p.getX())/2;
+			} else
+			if(diffy == 0) {
+				m = 0;
+				b = (q.getY() + p.getY())/2;
+			} else {
+				m = diffy/diffx;
+				b = ((p.getY() - m*p.getX()) + (q.getY() - m*q.getX()))/2;
+			}
+		}
+		return result;
+	}
+	
 	public static Line bisector(Point2D p, Point2D q) {
 		Line result = null;
 		double px = p.getX(), py = p.getY(), qx = q.getX(), qy = q.getY();
@@ -45,6 +68,10 @@ public class Line {
 		return getM() == Double.POSITIVE_INFINITY;
 	}
 
+	public boolean isHorizontal() {
+		return getM() == 0;
+	}
+	
 	protected Point2D intersectVertical(Line v, Line nv) {
 		// if nv is horizontal, and v holds x-value x always and nv holds
 		// y-value y always, then (x,y) is the intersection and since
@@ -81,6 +108,20 @@ public class Line {
 		return result;
 	}
 
+	public  Line perp(Point2D p) {
+		Line result = null;
+		if( isVertical() ) {
+			result = new Line(0, p.getY());
+		} else
+		if( isHorizontal() ) {
+			result = new Line(Double.POSITIVE_INFINITY, p.getX());
+		} else {
+			double mval = -1/getM();
+			result = new Line(mval, p.getY() - m * p.getX() );
+		}
+		return result;
+	}
+	
 	public double eval(double x) {
 		return m * x + b;
 	}
@@ -114,7 +155,7 @@ public class Line {
 	public void setB(double b) {
 		this.b = b;
 	}
-
+	
 	public String toString() {
 		return "[m=" + this.m + ",b=" + this.b + "]";
 	}
